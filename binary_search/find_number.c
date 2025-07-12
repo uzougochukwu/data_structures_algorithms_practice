@@ -13,6 +13,8 @@ int main() {
 
   int median_pos = 0;
 
+  int limit = count*count;
+
   int gap = end_point - start_point;
 
     if (gap % 2 == 0) {
