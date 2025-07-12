@@ -4,7 +4,7 @@ int main() {
 
   int number_list[] = {1,2,3,4,5,6,7,8,9};
 
-  int target = 9;
+  int target = 6;
 
   int count = sizeof(number_list)/sizeof(number_list[0]);
 
@@ -12,6 +12,11 @@ int main() {
   int end_point = count -1;
 
   int median_pos = 0;
+  /*
+   if (number_list[median_pos] == target){
+      printf("%d", median_pos);
+      goto end;
+      }*/
 
   int gap = end_point - start_point;
 
@@ -23,7 +28,8 @@ int main() {
       median_pos = (gap + 1) / 2;
     }
 
-    // printf("%d", median_pos);
+    int first_median = median_pos;
+
 for (int i = 0; i < count; i++){
 
     if (number_list[median_pos] == target){
@@ -36,26 +42,36 @@ for (int i = 0; i < count; i++){
       start_point = 0;
 
     } else {
-      end_point = count -1;
+      end_point = count -1 -median_pos;
       start_point = median_pos;
     }
 
     int gap = end_point - start_point;
     
-    //printf("%d", start_point);
+
     
     if (gap % 2 == 0) {
       median_pos = gap/2;
-      //must add start point
+      
+      //must add start point // maybe add current median to first median
+      if (target < number_list[median_pos]) {
       median_pos+=start_point;
+      }else {
+	median_pos+=median_pos;
+      }
 
-      // printf("%d", median_pos);
       
     } else {
 
       median_pos = (gap + 1) / 2;
       // must add start point
-       median_pos+=start_point;
+      
+      if (target < number_list[median_pos]) {
+      median_pos+=start_point;
+      }else {
+	median_pos+=median_pos;
+      }
+      
     }
 
     

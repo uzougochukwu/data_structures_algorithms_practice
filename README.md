@@ -1,2 +1,2 @@
-same basic data structures and algos practice
+some basic data structures and algos practice
 
