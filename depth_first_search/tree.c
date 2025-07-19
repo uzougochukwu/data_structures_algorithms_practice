@@ -14,13 +14,15 @@ char stack[5] = {};
 
 //stack[0] = *array[0]; // *array[0] is the memory address
 
+//use memcpy to move data from array to stack
+
 for (int i = 0; i < length; i++){
   stack[i] = *array[i];
-  printf("%s", &stack[i]);
+  printf("%s\0", array[i]);
   //printf("%d", i);
   
  }
- 
+//puts( &stack[2]);
 // printf("%s", &stack[0]); // the &stack[0] is now dereferencing that pointer
  
 return 0;
