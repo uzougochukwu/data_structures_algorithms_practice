@@ -16,7 +16,7 @@ char stack[5] = {};
 
 for (int i = 0; i < length; i++){
   stack[i] = *array[i];
-  //printf("%s", &stack[i]);
+  printf("%s", &stack[i]);
   //printf("%d", i);
   
  }
