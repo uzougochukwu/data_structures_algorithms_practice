@@ -4,22 +4,23 @@
 
 int main(){
 
-  char text[] = "hello";
+  char str[100], temp;
+  int i, len;
 
-  int length = strlen(text);
+  printf("Enter a string: ");
+  scanf("%s", str);
 
-  char reverseText[1][length] = {};
+  len = strlen(str);
 
-  int j = 0;
-
-  for (int i = length -1; i >= 0; i--){
-    reverseText[1][j] = text[i];
-    j++;
+  // reverse the string
+  for (i = 0; i < len / 2; i++) {
+    temp = str[i];
+    str[i] = str[len - i - 1];
+    str[len - i - 1] = temp;
+    
   }
 
-  printf("%s", reverseText[0]);
-  
+  printf("Reversed string: %s\n", str);
+
   return 0;
-
-
 }
