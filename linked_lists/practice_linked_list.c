@@ -41,6 +41,17 @@ void insert_after_node(node_t *node_to_insert_after, node_t* newnode){
   
 }
 
+void printList(node_t *head){
+  node_t *temporary = head;
+
+  while(temporary != NULL){
+    printf("%d - ", temporary->value);
+    temporary= temporary->next;
+  }
+  printf("\n");
+
+}
+
 int main() {
 
 node_t *head = NULL;
@@ -56,9 +67,13 @@ for (int i = 0; i < 25; i++) {
 
  insert_after_node(tmp, create_new_node(75));
 
+ printList(head);
+ 
+/*
 a.value = 5;
 printf("%d", a.value);
-
+*/
+ 
 return 0;
   
 }
