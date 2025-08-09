@@ -9,7 +9,7 @@ struct node {
 typedef struct node node_t;
 
 int main() {
-
+  /*
   node_t p;
 
   node_t *result_p;
@@ -19,10 +19,11 @@ int main() {
   result_p = malloc(sizeof(node_t));
 
   p.next = result_p;
+  */
 
   node_t o;
 
-  node_t *result_o;
+  //node_t *result_o;
 
   o.value = 8;
 
@@ -39,6 +40,16 @@ int main() {
   
 
    printf("The next pointer of o is %d and the address of i is %d\n", o.next, i);
+
+   node_t tmp;
+
+
+   tmp.value = o.value;
+   
+   printf("The second value is %d\n", i->value);
+
+   
+
 
   /*
   printf("The first value %d is located at memory address %d\n", p.value, p.next);
