@@ -21,17 +21,17 @@ int main() {
   p.next = result_p;
   */
 
-  node_t o;
+  node_t *o = malloc(sizeof(node_t));
 
   //node_t *result_o;
 
-  o.value = 8;
+  o->value = 8;
 
   //o.next = malloc(sizeof(node_t));
 
   node_t *i = malloc(sizeof(node_t));
 
-  o.next = i;
+  o->next = i;
 
   i->value = 10;
 
@@ -39,12 +39,12 @@ int main() {
   // create new node_t struct with the address being the address stored in o.next
   
 
-   printf("The next pointer of o is %d and the address of i is %d\n", o.next, i);
+   printf("The next pointer of o is %d and the address of i is %d\n", o->next, i);
 
-   node_t tmp;
+   node_t *tmp = malloc(sizeof(node_t));
 
 
-   tmp.value = o.value;
+   tmp->value = o->value;
    
    printf("The second value is %d\n", i->value);
 
