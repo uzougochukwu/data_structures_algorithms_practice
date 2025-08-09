@@ -26,15 +26,24 @@ int main() {
 
   o.value = 8;
 
-  result_o = malloc(sizeof(node_t));
+  //o.next = malloc(sizeof(node_t));
 
-  o.next = result_o;
+  node_t *i = malloc(sizeof(node_t));
 
+  o.next = i;
+
+  i->value = 10;
+
+  // use malloc to return a pointer and set that to o.next
+  // create new node_t struct with the address being the address stored in o.next
   
 
+   printf("The next pointer of o is %d and the address of i is %d\n", o.next, i);
+
+  /*
   printf("The first value %d is located at memory address %d\n", p.value, p.next);
 
   printf("The second value %d is located at memory address %d\n", o.value, o.next);
-  
+  */
   return 0;
 }
