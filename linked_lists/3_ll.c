@@ -107,31 +107,35 @@ int main() {
 
   head->value = 1;
 
-  node_t *tmp = head;
+  node_t *tmp = malloc(sizeof(node_t));
 
-  //printf("first value is %d\n", tmp->value);
+  tmp->value = 2;
+
+  head->next = tmp;
+
+  printf("second value is %d\n", head->next->value);
 
   
-  
+  /*
   for (int i = 2; i < 5; i++)
     {
       node_t *tmp = head;
 
       head = create_new_node(tmp, i); // constantly feeding in the current head, need to feed in the result of the last function
 
-       printf("value is %d\n", head->value);
+      printf("value is %d\n", head->value);
 
        // must move the next pointer
 
-       head->next = head;
+       //head->next = head;
      
-    }
+       }*/
 
   // create_new_node is replacing the head value, rather than linking it up
 
   //printf(" final value is %d\n", head->value);
 
-  print_list(head);
+  print_list(head); // print_list works somewhat
 
   return 0;
 }
