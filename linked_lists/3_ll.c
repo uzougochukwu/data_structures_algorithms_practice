@@ -115,14 +115,15 @@ int main() {
   
   for (int i = 2; i < 5; i++)
     {
-      // use malloc to create new node outside of function, then pass it in
       node_t *tmp = head;
 
       head = create_new_node(tmp, i); // constantly feeding in the current head, need to feed in the result of the last function
 
-
        printf("value is %d\n", head->value);
 
+       // must move the next pointer
+
+       head->next = head;
      
     }
 
