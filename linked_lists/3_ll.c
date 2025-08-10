@@ -58,15 +58,12 @@ node_t* create_new_node(node_t *node_to_add_from, int new_value)
 
 void print_list(node_t *current_node)
 {
-
   while (current_node->next != NULL)
     {
-
   int current_value = current_node->value;
   printf(" %d -> \n", current_value);
 
   current_node = current_node->next;
-
     }
 
   return;
@@ -105,16 +102,30 @@ int main() {
 
   node_t *head = malloc(sizeof(node_t));
 
+  node_t *tmp, *final;
+
   head->value = 1;
 
+  tmp = create_new_node(head, 2);
+
+  final = create_new_node(tmp, 3);
+  
+  /*
   node_t *tmp = malloc(sizeof(node_t));
 
   tmp->value = 2;
 
   head->next = tmp;
 
-  printf("second value is %d\n", head->next->value);
+  node_t *use = malloc(sizeof(node_t));
 
+  use->value = 3;
+
+  tmp->next = use;
+
+  printf("second value is %d\n", head->next->value);
+  */
+  
   
   /*
   for (int i = 2; i < 5; i++)
