@@ -37,6 +37,27 @@ void print_list(node_t *current_node)
   return;
 }
 
+void add_node_at_end(node_t *current_node, int new_value) // will always go to the final node before adding, so long as we give it a node that currently exists
+{
+  while (current_node-> next != NULL)
+    {
+      current_node = current_node->next;
+      
+    }
+
+  // the next pointer of the current node points to nothing, so we are at the end
+  
+  node_t *tmp = malloc(sizeof(node_t)); // create a new node 
+
+  // make the next pointer of the current node point to the tmp node
+
+  current_node->next = tmp;
+
+  tmp->value = new_value;
+  
+  return;
+}
+
 
 int main() {
 
@@ -44,8 +65,14 @@ int main() {
 
   head->value = 1;
 
-  // modify create_new_node to be add_node_at_end, traverse linked list till the end, then add the node
+  add_node_at_end(head, 2);
 
+  add_node_at_end(head, 3);
+
+  add_node_at_end(head, 4);
+
+  // modify create_new_node to be add_node_at_end, traverse linked list till the end, then add the node, print list shows how to traverse
+  /*
   node_t *tmp;
 
   tmp = create_new_node(head, 2);
@@ -61,7 +88,7 @@ int main() {
   node_t *even;
 
   even = create_new_node(again, 5);
-
+  */
 
   print_list(head); // print_list works somewhat
 
