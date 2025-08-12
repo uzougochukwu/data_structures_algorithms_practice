@@ -15,22 +15,43 @@ typedef struct node node_t;
 // add node at particular point - complete
 // delete node at beginning - complete but needs refactoring
 // delete node at end - complete
-// delete node at particular point
+// delete node at particular point - complete
 
 void delete_node_at_particular_point(node_t *current_node, int index)
 {
+  int i = 0;
 
   // traverse linked list until you reach index - 1
 
+  while ( (i != index -1) && (current_node->next != NULL) )
+    {
+      current_node = current_node->next;
+      i++;
+    }
+
+  // if current_node->next == NULL then exit the function as we are at the last node and we have a function to delete the last node
+
+  if (current_node->next == NULL)
+    {
+      return;
+    }
+
   // create tmp node
 
+  node_t *tmp;
+  
   // have tmp equal the node at index
 
+  tmp = current_node->next;
+
   // have next pointer of node at index - 1 equal to adress of node at index + 1
+  current_node->next = current_node->next->next;
 
   // now free tmp, which has the address of the node we wish to delete
 
-  // return;
+  free(tmp);
+
+  return;
 
 }
 
@@ -190,6 +211,10 @@ void delete_node_at_beginning()
   print_list(head);
 
   delete_node_at_end(head);
+
+  print_list(head);
+
+  delete_node_at_particular_point(head, 2);
 
   print_list(head);
 
