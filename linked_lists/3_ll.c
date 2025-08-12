@@ -57,17 +57,26 @@ void delete_node_at_particular_point(node_t *current_node, int index)
 
 void delete_node_at_end(node_t *current_node)
 {
-  while (current_node->next->next != NULL) // go to penultimate, then set next equal to NULL
+  while (current_node->next->next != NULL) // go to penultimate, then set next equal to NULL // need to actually go to end, then go one back
     {
       current_node = current_node->next;
     }
 
-    // we are now at penultimate
+    // we are now at penultimate  
 
   node_t *tmp = current_node->next; // create a tmp node with same address as the end node
 
+  printf("size of tmp is %d, size of current_node is %d\n", sizeof(tmp), sizeof(current_node) );
+
+  printf(" address of end node in tmp is %d, hardcoded version is %d\n", tmp, current_node->next);
+
+  printf("the value at that end node is %d from tmp or hardcoded is %d\n", tmp->value, current_node->next->value);
+
+
   current_node->next = NULL; // set the next pointer of penultimate node to be NULL, making it the new end node
 
+  printf("new end node is value %d\n", current_node->value);
+  
   free(tmp); // free tmp, which pointed to the previous end node
   return;
 
@@ -81,7 +90,9 @@ void print_list(node_t *current_node)
   int current_value = current_node->value;
   printf(" %d ->", current_value);
 
+  //printf(" the address is %d", &current_value);
   current_node = current_node->next;
+
     }
 
   printf("\n");
@@ -101,7 +112,12 @@ void add_node_at_end(node_t *current_node, int new_value) // will always go to t
   node_t *tmp = malloc(sizeof(node_t)); // create a new node 
   // make the next pointer of the current node point to the tmp node
   current_node->next = tmp;
-  tmp->value = new_value;  
+  tmp->value = new_value;
+
+  // possible fix current_node = current_node->next
+  // current_node->value = new_value
+  
+  //printf("the address of the end node is %d\n", &new_value);
   return;
 }
 
@@ -215,6 +231,12 @@ void delete_node_at_beginning()
   print_list(head);
 
   delete_node_at_particular_point(head, 2);
+
+  print_list(head);
+
+  printf("Now testing the add node at end part\n");
+
+  add_node_at_end(head, 50);
 
   print_list(head);
 
