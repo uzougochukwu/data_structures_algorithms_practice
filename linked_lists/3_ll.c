@@ -11,11 +11,12 @@ typedef struct node node_t;
 int number_of_nodes = 0;
 
 // other functions to add:
-// add node at beginning - complete
+// add node at beginning - complete - tested
 // add node at particular point - complete
-// delete node at beginning - complete but needs refactoring
-// delete node at end - complete
-// delete node at particular point - complete
+// add node at end - complete - tested
+// delete node at beginning - complete but needs refactoring -tested
+// delete node at end - complete - tested
+// delete node at particular point - complete - tested
 
 void delete_node_at_particular_point(node_t *current_node, int index)
 {
@@ -33,7 +34,7 @@ void delete_node_at_particular_point(node_t *current_node, int index)
 
   if (current_node->next == NULL)
     {
-      // may use this to remove end node
+      /*      // may use this to remove end node
         node_t *tmp;
   
   // have tmp equal the node at index
@@ -49,7 +50,7 @@ void delete_node_at_particular_point(node_t *current_node, int index)
 
   number_of_nodes--;
   // may use above to remove end node
-      
+  */
       return;
     }
 
@@ -68,7 +69,7 @@ void delete_node_at_particular_point(node_t *current_node, int index)
 
   free(tmp);
 
-  number_of_nodes--;
+  //number_of_nodes--;
 
   return;
 
@@ -79,11 +80,12 @@ void delete_node_at_particular_point(node_t *current_node, int index)
 
 void delete_node_at_end(node_t *current_node)
 {
-  int i = 1;
-  while (i != number_of_nodes-1) // go to penultimate, then set next equal to NULL // need to actually go to end, then go one back
+  //int i = 1;
+  // while (i != number_of_nodes-1) // go to penultimate, then set next equal to NULL // need to actually go to end, then go one back
+  while (current_node->next->next != NULL)
     {
       current_node = current_node->next;
-      i++;
+      //i++;
     }
 
     // we are now at penultimate  
@@ -104,7 +106,7 @@ void delete_node_at_end(node_t *current_node)
   //  printf("new end node is value %d\n", current_node->value);
   
   free(tmp); // free tmp, which pointed to the previous end node
-  number_of_nodes--;
+  //number_of_nodes--;
   return;
 
 }
@@ -155,7 +157,7 @@ void add_node_at_end(node_t *current_node, int new_value) // will always go to t
   current_node->value = new_value;
 
   // printf("current_node value is %d\n", current_node->value);
-  number_of_nodes++;
+  //number_of_nodes++;
   
   //printf("the address of the end node is %d\n", &new_value);
   return;
@@ -170,7 +172,7 @@ node_t* add_node_at_beginning(node_t *first_node, int new_value)
 
  tmp->next = first_node;
 
- number_of_nodes++;
+ //number_of_nodes++;
 
  return tmp;
 
@@ -189,6 +191,7 @@ void add_node_at_particular_point(node_t *current_node, int new_value, int index
   // if we are at the end, then exit the function (we already have a different function for adding nodes at the end
   if (current_node->next == NULL)
     {
+      /*
       // may be used to add node at end
 
         node_t *tmp = malloc(sizeof(node_t)); // create the new node
@@ -205,7 +208,7 @@ void add_node_at_particular_point(node_t *current_node, int new_value, int index
   number_of_nodes++;
 
   // may be used to add node at end
-      
+  */
       return;
     }
 
@@ -222,7 +225,7 @@ void add_node_at_particular_point(node_t *current_node, int new_value, int index
   // set the value for the tmp node we just made
   tmp->value = new_value;
 
-  number_of_nodes++;
+  //number_of_nodes++;
 
   return;
 }
@@ -256,13 +259,13 @@ void delete_node_at_beginning()
 
   head = add_node_at_beginning(head, 20);
 
-  printf("the list below should be equal to the list above, but with 20 added at the start\n");
+  //  printf("the list below should be equal to the list above, but with 20 added at the start\n");
 
   print_list(head);
 
   add_node_at_particular_point(head, 30, 2);
 
-  printf("the list below should be equal to the list above, but with 30 in index 2 (index starts at 0)\n");
+  // printf("the list below should be equal to the list above, but with 30 in index 2 (index starts at 0)\n");
 
   print_list(head);
 
@@ -283,7 +286,7 @@ void delete_node_at_beginning()
 
   // free the memory which tmp points to
 
-  printf("the list below should be the same as the list above, but with 20 removed from the start\n");
+  //  printf("the list below should be the same as the list above, but with 20 removed from the start\n");
 
   delete_node_at_beginning(); // USE THIS LINE
 
@@ -293,7 +296,7 @@ void delete_node_at_beginning()
 
   delete_node_at_end(head);
 
-  printf("the list below should be the same as the list above, but with 6 removed from the end\n");
+  //printf("the list below should be the same as the list above, but with 6 removed from the end\n");
 
   print_list(head);
 
@@ -301,7 +304,7 @@ void delete_node_at_beginning()
 
   print_list(head);
 
-  printf("the list below should be the same as the list above, but with the value that was previously at index 2, removed\n"); 
+  //printf("the list below should be the same as the list above, but with the value that was previously at index 2, removed\n"); 
 
   delete_node_at_particular_point(head, 2);
 
@@ -319,7 +322,9 @@ void delete_node_at_beginning()
 
   printf("number of nodes is %d\n", number_of_nodes);
 
+  print_list(head);
 
+  //  printf("the list below should be the same as the list above, but with 50 at the end added on\n");
 
   add_node_at_end(head, 50);
 
@@ -327,9 +332,13 @@ void delete_node_at_beginning()
 
     head = add_node_at_beginning(head, 200);
 
+    // printf("the list below should be the same as the list above, but with 200 at the start added on\n");
+
     print_list(head);
 
     add_node_at_particular_point(head, 35, 2);
+
+    printf("the list below should be the same as the list above, but with 35 in index position 2 (index starts at 0)\n");
 
     print_list(head);
 
