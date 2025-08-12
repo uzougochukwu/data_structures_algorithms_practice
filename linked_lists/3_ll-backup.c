@@ -8,48 +8,39 @@ struct node {
 
 typedef struct node node_t;
 
-
-
 // other functions to add:
 // add node at beginning - complete
 // add node at particular point - complete
-// delete node at beginning - complete but needs refactoring
-// delete node at end - complete
+// delete node at beginning
+// delete node at end
 // delete node at particular point
 
-void delete_node_at_particular_point(node_t *current_node, int index)
+node_t* delete_node_at_beginning(node_t *first_node)
 {
 
-  // traverse linked list until you reach index - 1
+  // tmp node must go to the second node so it can be returned
 
-  // create tmp node
+  node_t *tmp;
 
-  // have tmp equal the node at index
+  tmp->value = first_node->next->value;
 
-  // have next pointer of node at index - 1 equal to adress of node at index + 1
+  tmp->next = first_node->next->next;
 
-  // now free tmp, which has the address of the node we wish to delete
+  free(first_node);
 
-  // return;
+  return tmp;
+  /*
+  node_t *tmp; // placeholder node
 
-}
+  tmp->value = first_node->value;
 
-void delete_node_at_end(node_t *current_node)
-{
-  while (current_node->next->next != NULL) // go to penultimate, then set next equal to NULL
-    {
-      current_node = current_node->next;
-    }
+  tmp->next = first_node->next;
+  
+  free (first_node);
 
-    // we are now at penultimate
-
-  node_t *tmp = current_node->next; // create a tmp node with same address as the end node
-
-  current_node->next = NULL; // set the next pointer of penultimate node to be NULL, making it the new end node
-
-  free(tmp); // free tmp, which pointed to the previous end node
-  return;
-
+  return tmp;
+  */
+  
 }
 
 
@@ -131,22 +122,9 @@ void add_node_at_particular_point(node_t *current_node, int new_value, int index
 
 int main() {
 
-node_t *head = malloc(sizeof(node_t));
+  node_t *head = malloc(sizeof(node_t));
 
-head->value = 1;
-
-void delete_node_at_beginning()
-{
-  node_t *tmp = head;
-
-  head = head->next;
-
-  free(tmp);
-
-  return;
-  
-}
-
+  head->value = 1;
 
   for (int i = 2; i < 7; i++){
     add_node_at_end(head, i);
@@ -165,31 +143,23 @@ void delete_node_at_beginning()
   // head = head->next;
   //head->value = head->next->value;
 
-  //node_t *tmp = head; // set the value of tmp as being equal to the address of head USE THIS LINE
+  node_t *tmp = head; // set the value of tmp as being equal to the address of head USE THIS LINE
 
-  //printf("tmp is mem address %d and head is mem address %d\n", tmp, head);
+  printf("tmp is mem address %d and head is mem address %d\n", tmp, head);
   
   // change the address of head to be the address of the second node
 
-  //head = head->next; // USE THIS LINE
+  head = head->next; // USE THIS LINE
 
-  //printf("head is mem address %d and the second node is mem address %d\n", head, head->next);
+  printf("head is mem address %d and the second node is mem address %d\n", head, head->next);
 
   // change the value of the head to be the value of the second node
 
   // free the memory which tmp points to
 
-  delete_node_at_beginning(); // USE THIS LINE
+  //delete_node_at_beginning(head); // USE THIS LINE
 
-  //free(tmp); // USE THIS LINE
-
-  print_list(head);
-
-  delete_node_at_end(head);
-
-  print_list(head);
-
-  delete_node_at_end(head);
+  free(tmp); // USE THIS LINE
 
   print_list(head);
 
