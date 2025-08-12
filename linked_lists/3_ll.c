@@ -8,7 +8,7 @@ struct node {
 
 typedef struct node node_t;
 
-
+int number_of_nodes = 0;
 
 // other functions to add:
 // add node at beginning - complete
@@ -51,15 +51,22 @@ void delete_node_at_particular_point(node_t *current_node, int index)
 
   free(tmp);
 
+  number_of_nodes--;
+
   return;
 
 }
 
+// suggested fix for delete_node_at_end
+// 
+
 void delete_node_at_end(node_t *current_node)
 {
-  while (current_node->next->next != NULL) // go to penultimate, then set next equal to NULL // need to actually go to end, then go one back
+  int i = 1;
+  while (i != number_of_nodes-1) // go to penultimate, then set next equal to NULL // need to actually go to end, then go one back
     {
       current_node = current_node->next;
+      i++;
     }
 
     // we are now at penultimate  
@@ -72,12 +79,15 @@ void delete_node_at_end(node_t *current_node)
 
   printf("the value at that end node is %d from tmp or hardcoded is %d\n", tmp->value, current_node->next->value);
 
+  // go back one step and then set next to null
+  
 
   current_node->next = NULL; // set the next pointer of penultimate node to be NULL, making it the new end node
 
   printf("new end node is value %d\n", current_node->value);
   
   free(tmp); // free tmp, which pointed to the previous end node
+  number_of_nodes--;
   return;
 
 }
@@ -94,6 +104,9 @@ void print_list(node_t *current_node)
   current_node = current_node->next;
 
     }
+
+  // value at the very end is
+  printf("real end value is %d\n", current_node->value);
 
   printf("\n");
 
@@ -114,8 +127,16 @@ void add_node_at_end(node_t *current_node, int new_value) // will always go to t
   current_node->next = tmp;
   tmp->value = new_value;
 
+  printf("tmp value is %d\n", tmp->value);
+
   // possible fix current_node = current_node->next
   // current_node->value = new_value
+
+  current_node = current_node->next;
+  current_node->value = new_value;
+
+  printf("current_node value is %d\n", current_node->value);
+  number_of_nodes++;
   
   //printf("the address of the end node is %d\n", &new_value);
   return;
@@ -129,6 +150,8 @@ node_t* add_node_at_beginning(node_t *first_node, int new_value)
  tmp->value = new_value;
 
  tmp->next = first_node;
+
+ number_of_nodes++;
 
  return tmp;
 
@@ -163,6 +186,8 @@ void add_node_at_particular_point(node_t *current_node, int new_value, int index
   // set the value for the tmp node we just made
   tmp->value = new_value;
 
+  number_of_nodes++;
+
   return;
 }
 
@@ -179,6 +204,8 @@ void delete_node_at_beginning()
   head = head->next;
 
   free(tmp);
+
+  number_of_nodes--;
 
   return;
   
