@@ -1,3 +1,6 @@
+// IF YOU ADD A NODE AT THE BEGINNING YOU MUST USE HEAD = ADD_NODE_AT_BEGINNING(HEAD, 5); // REPLACE 5 WWITH THE VALUE YOU WANT
+
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -7,6 +10,9 @@ struct node {
 };
 
 typedef struct node node_t;
+
+// head is declared in main, but also used in delete_node_at_beginning, might cause the delete_node function to not truly delete the head node
+
 
 void delete_node_at_particular_point(node_t *current_node, int index)
 {
@@ -178,7 +184,39 @@ void delete_node_at_beginning()
 
   print_list(head);
 
+  printf("remove first node\n");
+
   delete_node_at_beginning();
+
+  print_list(head);
+
+  printf("remove node at index 3\n");
+
+  delete_node_at_particular_point(head, 3);
+
+  print_list(head);
+
+  printf("remove node at end\n");
+
+  delete_node_at_end(head);
+
+  print_list(head);
+
+  add_node_at_end(head, 10);
+
+  printf("10 added at end\n");
+
+  print_list(head);
+
+  head = add_node_at_beginning(head, 20);
+
+  printf("20 added at beginning\n");
+
+  print_list(head);
+
+  add_node_at_particular_point(head, 100, 3);
+
+  printf("100 inserted at index 3\n");
 
   print_list(head);
 
