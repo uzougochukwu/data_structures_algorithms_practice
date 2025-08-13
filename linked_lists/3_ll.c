@@ -152,6 +152,8 @@ void add_node_at_particular_point(node_t *current_node, int new_value, int index
   return;
 }
 
+
+
 int main() {
 
 node_t *head = malloc(sizeof(node_t));
@@ -173,6 +175,10 @@ void delete_node_at_beginning()
   for (int i = 2; i < 7; i++){
     add_node_at_end(head, i);
   }
+
+  print_list(head);
+
+  delete_node_at_beginning();
 
   print_list(head);
 
