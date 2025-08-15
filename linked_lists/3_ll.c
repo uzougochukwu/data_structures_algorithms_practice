@@ -1,5 +1,7 @@
 // IF YOU ADD A NODE AT THE BEGINNING YOU MUST USE HEAD = ADD_NODE_AT_BEGINNING(HEAD, 5); // REPLACE 5 WWITH THE VALUE YOU WANT
 
+// added suggestion for how to fix add_node_at_beginning
+
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -75,7 +77,7 @@ void delete_node_at_end(node_t *current_node)
 
 void print_list(node_t *current_node)
 {
-  while (current_node->next != NULL)
+  while (current_node != NULL)
     {
   int current_value = current_node->value;
   printf(" %d ->", current_value);
@@ -88,7 +90,7 @@ void print_list(node_t *current_node)
   // if it is null the while loop breaks, so we need one more final print
 
   // value at the very end is
-  printf(" %d ->", current_node->value);
+  //printf(" %d ->", current_node->value);
 
   printf("\n");
 
@@ -123,6 +125,8 @@ node_t* add_node_at_beginning(node_t *first_node, int new_value)  // must do hea
  tmp->value = new_value;
 
  tmp->next = first_node;
+
+ // maybe have head = tmp; and have the function take in head as a third parameter too
 
  return tmp;
 
