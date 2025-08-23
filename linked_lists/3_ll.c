@@ -9,6 +9,8 @@ struct node {
 
 typedef struct node node_t;
 
+node_t head;
+
 // head is declared in main, but also used in delete_node_at_beginning, might cause the delete_node function to not truly delete the head node
 
 
@@ -158,6 +160,18 @@ void add_node_at_particular_point(node_t *current_node, int new_value, int index
   return;
 }
 
+node_t* delete_node_at_beginning(node_t *current_node)
+{
+  node_t *tmp = current_node;
+
+  current_node = current_node->next;
+
+  free(tmp);
+
+  return current_node;
+  
+}
+
 
 
 int main() {
@@ -166,17 +180,6 @@ node_t *head = malloc(sizeof(node_t));
 
 head->value = 1;
 
-void delete_node_at_beginning()
-{
-  node_t *tmp = head;
-
-  head = head->next;
-
-  free(tmp);
-
-  return;
-  
-}
 
 
   for (int i = 2; i < 7; i++){
@@ -187,7 +190,7 @@ void delete_node_at_beginning()
 
   printf("remove first node\n");
 
-  delete_node_at_beginning();
+  head = delete_node_at_beginning(head);
 
   print_list(head);
 
@@ -209,7 +212,7 @@ void delete_node_at_beginning()
 
   print_list(head);
 
-  add_node_at_beginning(head, 20);
+  head = add_node_at_beginning(head, 20);
 
   printf("20 added at beginning\n");
 
@@ -223,6 +226,4 @@ void delete_node_at_beginning()
 
   return 0;
 }
-
-
 
