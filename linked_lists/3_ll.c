@@ -1,3 +1,4 @@
+// if you delete the head node or add a node at the beginning, then you need to use &head as the first parameter, delete_node_at_beginning(&head)
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -115,15 +116,15 @@ void add_node_at_end(node_t *current_node, int new_value) // will always go to t
   return;
 }
 
-node_t* add_node_at_beginning(node_t *head, int new_value) {
+node_t* add_node_at_beginning(node_t **head, int new_value) { // by passing in a pointer to a pointer, that means we can actually change the head pointer
 
  node_t *tmp = malloc(sizeof(node_t));
 
  tmp->value = new_value;
 
- tmp->next = head;
+ tmp->next = *head; // set the next pointer of the tmp node to the same address contained in the current head pointer. this is essentially linking the tmp node to the list by adding it just before the current head node
 
- head = tmp;
+ *head = tmp; // change the head pointer to be the address of the tmp node, so tmp is our new head node
 
  return tmp;
 
@@ -160,15 +161,18 @@ void add_node_at_particular_point(node_t *current_node, int new_value, int index
   return;
 }
 
-node_t* delete_node_at_beginning(node_t *current_node)
+node_t* delete_node_at_beginning(node_t **current_node) // by passing in a pointer to a pointer, that means we can actually change the head pointer
 {
-  node_t *tmp = current_node;
+  // tmp pointer is equal to the head pointer (which we called current_node for convenience)
+  node_t *tmp = *current_node;
 
-  current_node = current_node->next;
+  // pointer containing address of current_node is changed to contain the address of where the actual current_node's next pointer is pointing to
+  // the (*current_node) is dereferencing the current_node pointer so that we can access the actual node, once we do that, we can then access the actual next pointer 
+  *current_node = (*current_node)->next;
 
   free(tmp);
 
-  return current_node;
+  return *current_node; // we return the address of the current_node as this now becomes the address of the head pointer
   
 }
 
@@ -190,7 +194,7 @@ head->value = 1;
 
   printf("remove first node\n");
 
-  head = delete_node_at_beginning(head);
+  delete_node_at_beginning(&head);
 
   print_list(head);
 
@@ -212,7 +216,7 @@ head->value = 1;
 
   print_list(head);
 
-  head = add_node_at_beginning(head, 20);
+  add_node_at_beginning(&head, 20);
 
   printf("20 added at beginning\n");
 
