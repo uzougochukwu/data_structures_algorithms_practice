@@ -1,14 +1,10 @@
-// IF YOU ADD A NODE AT THE BEGINNING YOU MUST USE HEAD = ADD_NODE_AT_BEGINNING(HEAD, 5); // REPLACE 5 WWITH THE VALUE YOU WANT
-
-// added suggestion for how to fix add_node_at_beginning
-
 
 #include <stdlib.h>
 #include <stdio.h>
 
 struct node {
   int value;
-  struct node* next;
+  struct node* next; 
 };
 
 typedef struct node node_t;
@@ -117,18 +113,18 @@ void add_node_at_end(node_t *current_node, int new_value) // will always go to t
   return;
 }
 
-node_t* add_node_at_beginning(node_t *first_node, int new_value)  // must do head = add_node_at_beginning(head, new_value)
-{
+node_t* add_node_at_beginning(node_t *head, int new_value) {
 
  node_t *tmp = malloc(sizeof(node_t));
 
  tmp->value = new_value;
 
- tmp->next = first_node;
+ tmp->next = head;
 
- // maybe have head = tmp; and have the function take in head as a third parameter too
+ head = tmp;
 
  return tmp;
+
 
 }
 
@@ -182,6 +178,7 @@ void delete_node_at_beginning()
   
 }
 
+
   for (int i = 2; i < 7; i++){
     add_node_at_end(head, i);
   }
@@ -212,7 +209,7 @@ void delete_node_at_beginning()
 
   print_list(head);
 
-  head = add_node_at_beginning(head, 20);
+  add_node_at_beginning(head, 20);
 
   printf("20 added at beginning\n");
 
@@ -226,3 +223,6 @@ void delete_node_at_beginning()
 
   return 0;
 }
+
+
+
