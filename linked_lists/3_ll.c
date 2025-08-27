@@ -129,7 +129,7 @@ node_t* add_node_at_beginning(node_t **head, int new_value) { // by passing in a
 
 }
 
-void add_node_at_particular_point(node_t *current_node, int new_value, int index) // if we pass in index as 2, that means the node we insert should occupy index 2
+int add_node_at_particular_point(node_t *current_node, int new_value, int index) // if we pass in index as 2, that means the node we insert should occupy index 2
 {
   int i = 0;
 
@@ -142,7 +142,7 @@ void add_node_at_particular_point(node_t *current_node, int new_value, int index
   // if we are at the end, then exit the function (we already have a different function for adding nodes at the end
   if (current_node->next == NULL)
     {
-      return;
+      return -1;
     }
 
   node_t *tmp = malloc(sizeof(node_t)); // create the new node
@@ -156,7 +156,7 @@ void add_node_at_particular_point(node_t *current_node, int new_value, int index
   // set the value for the tmp node we just made
   tmp->value = new_value;
 
-  return;
+  return 0;
 }
 
 node_t* delete_node_at_beginning(node_t **current_node) // by passing in a pointer to a pointer, that means we can actually change the head pointer
@@ -229,7 +229,14 @@ head->value = 1;
   if(delete_node_at_particular_point(head, 6) < 0)
     delete_node_at_end(head);
 
-  printf("used particular point to remove end, might not work\n");
+  printf("used particular point with if statement to remove end\n");
+
+  print_list(head);
+
+  if (add_node_at_particular_point(head, 88, 10) < 0)
+    add_node_at_end(head, 88);
+
+  printf("used particular point with if statement to add node at end\n");
 
   print_list(head);
 
