@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 struct node {
   int value;
@@ -10,48 +11,7 @@ struct node {
 
 typedef struct node node_t;
 
-node_t head;
-
-// head is declared in main, but also used in delete_node_at_beginning, might cause the delete_node function to not truly delete the head node
-
-
-void delete_node_at_particular_point(node_t *current_node, int index)
-{
-  int i = 0;
-
-  // traverse linked list until you reach index - 1
-
-  while ( (i != index -1) && (current_node->next != NULL) )
-    {
-      current_node = current_node->next;
-      i++;
-    }
-
-  // if current_node->next == NULL then exit the function as we are at the last node and we have a function to delete the last node
-
-  if (current_node->next == NULL)
-    {
-      return;
-    }
-
-  // create tmp node
-
-  node_t *tmp;
-  
-  // have tmp equal the node at index
-
-  tmp = current_node->next;
-
-  // have next pointer of node at index - 1 equal to adress of node at index + 1
-  current_node->next = current_node->next->next;
-
-  // now free tmp, which has the address of the node we wish to delete
-
-  free(tmp);
-
-  return;
-
-}
+node_t *head;
 
 void delete_node_at_end(node_t *current_node)
 {
@@ -72,6 +32,44 @@ void delete_node_at_end(node_t *current_node)
   return;
 
 }
+
+int delete_node_at_particular_point(node_t *current_node, int index)
+{
+  int i = 0;
+
+  // traverse linked list until you reach index - 1
+
+  while ( (i != index -1) && (current_node->next != NULL) )
+    {
+      current_node = current_node->next;
+      i++;
+    }
+
+  if (current_node->next == NULL)
+    {
+
+      return -1; // to signify that the index exceeds the length of the linked list so we must use delete_node_at_end
+    }
+
+  // create tmp node
+
+  node_t *tmp;
+  
+  // have tmp equal the node at index
+
+  tmp = current_node->next;
+
+  // have next pointer of node at index - 1 equal to adress of node at index + 1
+  current_node->next = current_node->next->next;
+
+  // now free tmp, which has the address of the node we wish to delete
+
+  free(tmp);
+
+  return 0;
+
+}
+
 
 
 void print_list(node_t *current_node)
@@ -225,6 +223,13 @@ head->value = 1;
   add_node_at_particular_point(head, 100, 3);
 
   printf("100 inserted at index 3\n");
+
+  print_list(head);
+
+  if(delete_node_at_particular_point(head, 6) < 0)
+    delete_node_at_end(head);
+
+  printf("used particular point to remove end, might not work\n");
 
   print_list(head);
 
