@@ -6,12 +6,12 @@
 
 struct node {
   int value;
-  struct node* next; 
+  struct node* next; // we have struct node* next because the pointer contains the address of the next struct
 };
 
 typedef struct node node_t;
 
-node_t *head;
+//node_t *head;
 
 void delete_node_at_end(node_t *current_node)
 {
@@ -198,7 +198,8 @@ head->value = 1;
 
   printf("remove node at index 3\n");
 
-  delete_node_at_particular_point(head, 3);
+  if ( delete_node_at_particular_point(head, 3) < 0)
+    delete_node_at_end(head);
 
   print_list(head);
 
@@ -220,7 +221,8 @@ head->value = 1;
 
   print_list(head);
 
-  add_node_at_particular_point(head, 100, 3);
+  if (add_node_at_particular_point(head, 100, 3) < 0)
+    add_node_at_end(head, 100);
 
   printf("100 inserted at index 3\n");
 
