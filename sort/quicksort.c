@@ -33,21 +33,16 @@ int main(){
 
   int array_length = sizeof(array)/sizeof(array[0]);
 
-  printf("This element is %d\n", array[3]);
 
-  int new_array[5] = {};
+  swap(0, 4, array, array_length);
 
-  array[0] = 4;
+  printf("first element is %d and the last one is %d\n", array[0], array[4]);
 
-  printf("the element at index 0 of the array is %d\n", array[0]);
-
-  array[0] = 5;
-
-   printf("the element at index 0 of the array is now %d\n", array[0]);
-
-   printf("the array is of length %d\n", array_length);
-   
-
+  int outcome = swap(0, 6, array, array_length);
+    
+  if ( outcome  < 0 )
+    printf("out of bounds on a position, so error code %d\n", outcome);
+      
   return 0;
 
 }
