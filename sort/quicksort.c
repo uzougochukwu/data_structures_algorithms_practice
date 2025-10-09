@@ -25,24 +25,34 @@ int swap(int pos_A, int pos_B, int array[], int array_length){
 
 }
 
+int print_entire_array(int array[], int array_length){
+
+  for (int i = 0; i < array_length; i++) {
+    printf("%d,", array[i]);
+
+  }
+
+  printf("\n");
+
+  return 0;
+}
+
 int main(){
 
   int array[5] = {1,2,3,4,5};
 
   int array_length = sizeof(array)/sizeof(array[0]);
 
+  print_entire_array(array, array_length);
+
   swap(0, 4, array, array_length);
 
-  printf("first element is %d and the last one is %d\n", array[0], array[4]);
-
-  int outcome;
-  
-  if (  ( outcome = swap(0, 6, array, array_length) )  < 0 )
-    printf("out of bounds on a position, so error code %d\n", outcome);
 
   // need a data structure to contain a list of sub arrays, when the sub arrays are all of length 1, we know that the sort is finished
   // for each sub array, record the starting index and the length of the sub array
 
+  
+  
     
       
   return 0;
