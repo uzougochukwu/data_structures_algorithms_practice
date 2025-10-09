@@ -37,24 +37,44 @@ int print_entire_array(int array[], int array_length){
   return 0;
 }
 
+
 int main(){
 
-  int array[5] = {1,2,3,4,5};
-
+  int array[5] = {3,5,2,4,1};
+  
   int array_length = sizeof(array)/sizeof(array[0]);
 
-  print_entire_array(array, array_length);
+    print_entire_array(array, array_length);
 
-  swap(0, 4, array, array_length);
+  int left = 0;
 
+  int pivot = array_length - 1;  
 
-  // need a data structure to contain a list of sub arrays, when the sub arrays are all of length 1, we know that the sort is finished
-  // for each sub array, record the starting index and the length of the sub array
+  int right = pivot - 1;
 
-  
-  
+  while (pivot > 0) {
     
-      
+  while(left < right){
+    if (array[left] < array[right]){
+      left++;}
+
+    if (array[right] > array[left]){
+      right--; continue;}
+    
+    swap(left, right, array, array_length);
+  }
+
+  pivot = left;
+
+  right = pivot -1;
+
+  left = 0;
+
+  }
+
+  print_entire_array(array, array_length);
+  
+        
   return 0;
 
 }
