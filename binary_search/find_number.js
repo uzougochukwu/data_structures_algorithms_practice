@@ -7,7 +7,7 @@ const binary_search = (array, value) => {
 
     while (left <= right){
 
-	mid = Math.ceil(left + (right - left)/2);
+	mid = Math.floor(left + (right - left)/2); // works for both floor and ceiling, explain why
 
 	if (array[mid] == value){
 
@@ -27,5 +27,5 @@ const binary_search = (array, value) => {
     console.log(`Your value is in position ${mid}`); 
 }
 
-binary_search(sorted_array, 7);
+binary_search(sorted_array, -1);
 
