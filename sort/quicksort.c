@@ -1,80 +1,85 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
-int swap(int pos_A, int pos_B, int array[], int array_length){
+void swap(int *x, int *y);
+void quicksort(int array[], int length);
+void quicksort_recursion(int array[], int low, int high);
+int partition(int array[], int low, int high);
 
-  //if position of A or B is out of bounds of array
-  if (pos_A > array_length - 1 )
-  return -1;
+int main()
+{
 
-  if (pos_B > array_length -1 )
-    return -1;
+  int a[] = {10, 11, 23, 44, 8, 15, 3, 9, 12, 45, 56, 45, 45};
 
-  // must save the value at position A to a temporary variable
+  int length = 13;
 
-  int tmp_value = array[pos_A];
-  
-  array[pos_A] = array[pos_B]; // set the value at position A to be the value at position B
+  quicksort(a, length);
 
-  printf("the value at position A of %d has been set to the value at position B, which is %d\n", tmp_value, array[pos_B]);
-
-  array[pos_B] = tmp_value; // set the value at position B to be the temporary variable (which is what the value at A was, before the swap)
-
-  printf("the value at position B of %d has been set to the original value at position A, which is %d\n", array[pos_A], tmp_value);
-  
-  return 0;
-
-}
-
-int print_entire_array(int array[], int array_length){
-
-  for (int i = 0; i < array_length; i++) {
-    printf("%d,", array[i]);
-
+  for (int i = 0; i < length; i++){
+    printf("%d ", a[i]);
   }
-
   printf("\n");
-
+    
   return 0;
 }
 
 
-int main(){
-
-  int array[5] = {3,5,2,4,1};
+void swap(int *x, int *y){
   
-  int array_length = sizeof(array)/sizeof(array[0]);
+  int temp = *x;
 
-    print_entire_array(array, array_length);
+  *x = *y;
 
-  int left = 0;
+  *y = temp;
+}
 
-  int pivot = array_length - 1;  
 
-  int right = pivot - 1;
+void quicksort(int array[], int length){
 
-  while (pivot > 0) {
-    
-  while(left < right){
-    if (array[left] < array[right]){
-      left++;}
+  srand(time(NULL));
 
-    if (array[right] > array[left]){
-      right--; continue;}
-    
-    swap(left, right, array, array_length);
-  }
+  quicksort_recursion(array, 0, length -1);
 
-  pivot = left;
+}
 
-  right = pivot -1;
+void quicksort_recursion(int array[], int low, int high){
 
-  left = 0;
+  if (low < high){
 
-  }
+  int pivot_index = partition(array, low, high);
 
-  print_entire_array(array, array_length);
+  quicksort_recursion(array, low, pivot_index - 1);
+
+  quicksort_recursion(array, pivot_index + 1, high);
+
+  }  
+}
+
+
+int partition(int array[], int low, int high){
+
+  int pivot_index = low + (rand() & (high - low));
+
+  if (pivot_index != high)
+    swap(&array[pivot_index], &array[high]);
   
-        
-  return 0;
+  int pivot_value = array[high];
+
+  int i = low;
+
+  for (int j = low; j < high; j++)
+    {
+      if (array[j] <= pivot_value){
+
+	swap(&array[i], &array[j]);
+	i++;
+      }
+
+    }
+
+  swap(&array[i], &array[high]);
+
+  return i;
 
 }
