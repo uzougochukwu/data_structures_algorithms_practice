@@ -9,9 +9,9 @@
 // const [x,y] = getCoordinates();
 // console.log(x,y)
 
-// const nums = [10, 1, 5];
-// nums.sort((x, y) => y - x);
-// console.log(nums);
+const nums = [10, 1, 5];
+nums.sort((x, y) => y - x); // from largest to smallest
+console.log(nums);
 
 // const arr = [1, 2, 2, 3];
 
@@ -49,10 +49,10 @@
 
 // console.log(max);
 
-let a = 5;
+// let a = 5;
 
-let b = 10;
+// let b = 10;
 
-[a, b] = [b, a];
+// [a, b] = [b, a];
 
-console.log(a, b);
+// console.log(a, b);

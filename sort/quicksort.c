@@ -1,3 +1,5 @@
+// from this video https://www.youtube.com/watch?v=0jDiBM68NGU
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -59,7 +61,7 @@ void quicksort_recursion(int array[], int low, int high){
 
 int partition(int array[], int low, int high){
 
-  int pivot_index = low + (rand() & (high - low));
+  int pivot_index = low + (rand() % (high - low));
 
   if (pivot_index != high)
     swap(&array[pivot_index], &array[high]);
@@ -71,15 +73,15 @@ int partition(int array[], int low, int high){
   for (int j = low; j < high; j++)
     {
       if (array[j] <= pivot_value){
-
 	swap(&array[i], &array[j]);
 	i++;
       }
-
     }
 
-  swap(&array[i], &array[high]);
+  swap(&array[i], &array[high]); // this puts the pivot (which is array[high] into the position it will occupy when the sort is finished.
+  // remember, i is only incremented when we find an element that is less than or equal to the pivot value
+  // which means that when we finally exit the for loop, i is at the position of the first element to be greater than the pivot, so it makes sense to swap the element at i with the pivot value (array[high]), so that the pivot value serves its role as a pivot
+  // everything to the left of the pivot will be less than, everything to the right will be greater than
 
   return i;
-
 }
