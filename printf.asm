@@ -32,21 +32,12 @@ put_digits_on_stack:
 
 	jmp put_digits_on_stack
 
-
 print:
-
-	cmp r12, 0x0
-	je exit
-
 	mov rdi, 0x1
 	mov rax, 0x1
-	mov rsi, rsp
-	mov rdx, 0x1
+	mov rsi, rsp		; start at current mem address in rsp
+	mov rdx, r12		; print from rsp to rsp + r12
 	syscall
-
-	add rsp, 0x1
-	dec r12
-	jmp print
 
 exit:
 	
