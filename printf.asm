@@ -9,37 +9,29 @@ _start:
 	xor rdx, rdx		; zero out rdx as the remainder is stored here (which we will print)
 	xor r12, r12		; keep track of no. of digits to print
 
-	mov rax, 0xFFFFFFFFFFFFFFFF		; dividend goes in rax, this is what we will print
+	mov rax, 0xA00		; dividend goes in rax, this is what we will print
 	mov rdi, 0xA
 
-	sub rsp, 0x4
 
 put_digits_on_stack:
-	cmp rax, 0		; if the final digit is zero, it means one of two things: 1.) we already printed the last digit 2.) the last digit is 0
-	je last_digit
+	cmp rax, 0		; if the final digit is zero, it means we have printed the last digit. the only way to have 0 in rax, is if the number we just divided was less than 10, so we can start printing the numbers
+	je print
 
 	div rdi			; rax / rdi , quotient (the result of the division) goes in rax
 	; rdx has the remainder
 
 	add rdx, 0x30		; add 0x30 so it is converted to an ascii text value of the number
 
+	sub rsp, 0x4		; move rsp down 4 bytes, as 32 bit int
+
 	mov dword [rsp], edx	; dword as 32 bit
 
 	xor rdx, rdx		; division is rdx:rax divided by rdi, so we must zero rdx after each divide, since that is where the remainder is stored
-
-	sub rsp, 0x4		; move rsp down 4 bytes, as 32 bit int
 
 	inc r12			; increase r12 as we have moved a digit to the stack for printing
 
 	jmp put_digits_on_stack
 
-last_digit:
-	add rdx, 0x30
-	mov dword [rsp], edx
-
-	inc r12
-
-	add rsp, 0x4
 
 print:
 
