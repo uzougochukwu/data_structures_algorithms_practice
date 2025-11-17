@@ -9,7 +9,7 @@ _start:
 	xor rdx, rdx		; zero out rdx as the remainder is stored here (which we will print)
 	xor r12, r12		; keep track of no. of digits to print
 
-	mov rax, 0xA00		; dividend goes in rax, this is what we will print
+	mov rax, 0xFFFFFFFFFFFFFFFF		; dividend goes in rax, this is what we will print
 	mov rdi, 0xA
 
 
@@ -22,9 +22,9 @@ put_digits_on_stack:
 
 	add rdx, 0x30		; add 0x30 so it is converted to an ascii text value of the number
 
-	sub rsp, 0x4		; move rsp down 4 bytes, as 32 bit int
+	dec rsp		        ; move rsp down 1 byte
 
-	mov dword [rsp], edx	; dword as 32 bit
+	mov byte [rsp], dl	; move the remainder onto the stack, byte as dl is low byte of rdx. the remainder will be 9 at most which in binary is 1001, so the remainder will always fit in one byte
 
 	xor rdx, rdx		; division is rdx:rax divided by rdi, so we must zero rdx after each divide, since that is where the remainder is stored
 
@@ -44,7 +44,7 @@ print:
 	mov rdx, 0x1
 	syscall
 
-	add rsp, 0x4
+	add rsp, 0x1
 	dec r12
 	jmp print
 
