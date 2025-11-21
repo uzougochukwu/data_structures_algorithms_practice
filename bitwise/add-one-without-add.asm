@@ -14,14 +14,26 @@ _start:
 	call check_a_bit
 	pop rax			; restore value of rax
 
+	call flip_bit
+
 	mov rax, 0x3c	
 	syscall
 
 
-flip_from_one_to_zero:
+flip_bit:
 
-	; takes bit number in rdi
+	; {cl} = bit index
 	; flips that bit from one to zero in rax
+
+	mov r12, 0x1
+
+	shl r12, cl		; move that first bit in r12 to correct position
+
+	xor rax, r12		; if that particular bit in rax is one, then it will be flipped to zero, if it is zero it will be flipped to one
+
+	ret
+
+	
 
 
 check_a_bit:
