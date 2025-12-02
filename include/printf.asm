@@ -1,4 +1,10 @@
+	; division of any number from 9223372036854775807 to -9223372036854775808
+	; it prints any signed 64 bit number, with the most significant bit being the sign bit
+
+
 section .data
+
+negative_sign: db "-"
 
 global _start
 
@@ -9,7 +15,7 @@ _start:
 	xor rdx, rdx		; zero out rdx as the remainder is stored here (which we will print)
 	xor r12, r12		; keep track of no. of digits to print
 
-	mov rax, -23045		; dividend goes in rax, this is what we will print
+	mov rax, -9223372036854775808	; dividend goes in rax, this is what we will print
 	mov rdi, 0xA
 
 	test rax, rax		; determine if rax is negative
@@ -17,21 +23,22 @@ _start:
 	jns put_digits_on_stack
 
 	neg rax
-	dec rsp
-
-	mov byte [rsp], '-'
 
 	push rdi		; save rdi as it must be 10 for the division
+	push rax		; save rax as it contains the number
+	push rdx
 
 	mov rdi, 0x1
 	mov rax, 0x1
-	mov rsi, rsp		; start at current mem address in rsp
+	mov rsi, negative_sign
 	mov rdx, 0x1		; print 1 byte
 	syscall
 
+	pop rdx
+	pop rax
 	pop rdi			; restore rdi
 
-	inc r12
+
 
 put_digits_on_stack:
 	cmp rax, 0		; if the final digit is zero, it means we have printed the last digit. the only way to have 0 in rax, is if the number we just divided was less than 10, so we can start printing the numbers
