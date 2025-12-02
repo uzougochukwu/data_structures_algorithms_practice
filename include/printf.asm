@@ -9,9 +9,29 @@ _start:
 	xor rdx, rdx		; zero out rdx as the remainder is stored here (which we will print)
 	xor r12, r12		; keep track of no. of digits to print
 
-	mov rax, 0xFFFFFFFFFFFFFFFF		; dividend goes in rax, this is what we will print
+	mov rax, -23045		; dividend goes in rax, this is what we will print
 	mov rdi, 0xA
 
+	test rax, rax		; determine if rax is negative
+
+	jns put_digits_on_stack
+
+	neg rax
+	dec rsp
+
+	mov byte [rsp], '-'
+
+	push rdi		; save rdi as it must be 10 for the division
+
+	mov rdi, 0x1
+	mov rax, 0x1
+	mov rsi, rsp		; start at current mem address in rsp
+	mov rdx, 0x1		; print 1 byte
+	syscall
+
+	pop rdi			; restore rdi
+
+	inc r12
 
 put_digits_on_stack:
 	cmp rax, 0		; if the final digit is zero, it means we have printed the last digit. the only way to have 0 in rax, is if the number we just divided was less than 10, so we can start printing the numbers
@@ -44,3 +64,6 @@ exit:
 	mov rdi, 0x1
 	mov rax, 0x3c
 	syscall
+
+
+	
