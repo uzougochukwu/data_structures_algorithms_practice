@@ -34,65 +34,92 @@
 
 	; max number to display is 9223372036854775807
 
+
 %include "../include/printf.asm"
 
-	; printf can only be used once due to incorrectly saving and restoring registers
-	; number to print in rax
-	
+	; for printf number must be in rax
 
 
 section .data
-	p4_series dq 1, 16, 256, 65536 ; scaling factor is 8 because it is 8 bytes in a quadword
+	; 2^0, 2^4, 2^8, 2^12, 2^16 ...
+	p4_series dq 1, 16, 256, 4096, 65536 
+	
 section .text
 	
 global _start	
 
 _start:
 
-entry:
-	; decimal number stored in r11
-	; binary coded decimal number stored in rsi
+	; convert decimal 25 into binary coded decimal
+	; 25 is in bcd 0010 0101
+	; 0000 0000 0000 0000 ...
 
+	; decimal number to be stored in r11 to begin with and rax for calculations
+	; the binary coded decimal number to be stored in rsi
+
+	; end condition - if value in rax is zero after a division - means we have created final remainder (which is the digit)
+	; rcx will be i
+
+	; 42 in bcd
+	; 0100 0010
+
+	; 7 7 5
+	; 0111 0111 0101
+
+	; 1001
+	; 0001 0000 0000 0001
+
+	; 12376
+	; 0001 0010 0011 0111 0110
+
+	; 1237
+	; 0001 0010 0011 0111
+	
+	mov r11, 12376
+	mov rax, 12376
+	mov rcx, 0
+	mov rdi, 10
 	xor rsi, rsi
-
-	mov rax, 25
-
-	mov r11, 25
-
-	mov rdi, 0xa
 	
-	div rdi 		; rax / rdi = result in rax and rem in rdx
+	; need register to store whether or not this is the last digit
+	mov r15, 0		; if r15 is 1, we are on last digit and can exit
 
-	; remainder stored in rdx
+	mov r13, 1
 
-	add rsi, rdx		; rsi will contain final bcd number
+	; if rax was 10 -> 10/10 = 1 r 0 -> 1/10 = 0 r 1
 
-	; first number is in rsi
+decimal_to_bcd:
 
-	; must clear rdx otherwise div instruction becomes different
+	mov rax, r11		; move result of previous div into rax
 
-	; rsi contains 5 - as it should
+	div rdi
 
-	xor rdx, rdx
+	test rax, rax		; rax is the result of the div instruction, if it is zero that means we are on the last digit, but we still need to go through the rest of the loop (for the last time)
+	cmovz r15, r13		; if the result of test rax, rax sets the zero flag, we want to move 1 into r15, to show we are on the last digit
 
-	div rdi			; rax / rdi = result in rax and rem in rdx
+	; the result in rax is being overwritten, may need to save it elsewhere
 
-	mov rax, rdx		; need to multiply rem by power of 4 factor (rem is 2 now)
+	mov r11, rax		; store this result for next iteration
 
-	
+	mov rax, rdx		; move remainder into rax for scaling
 
-	; 2 is in rax as it should be
-	
-	mul qword [p4_series+ 1*8]
+	xor rdx, rdx		; zero out rdx to not confound next division
 
-	; 2 * 16 should be 32
-	; 32 is in rax
+	mul qword [p4_series + rcx*8] ; multiplied remainder by the scaling
 
 	add rsi, rax
 
-	; rsi should now have 37
+	inc rcx
 
-	mov rax, rsi  		; it does!
+	test r15, r15		; see if r15 is 1, if it is zero loop again
+	jz decimal_to_bcd
+
+
+
+
+
+print_result:
+	mov rax, rsi
 	call printf
 
 end:	
