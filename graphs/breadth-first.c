@@ -27,12 +27,12 @@ void print_depth_first(TreeNode* root){
     printf("%d ", current->val);
   
 
-    if (current->right != NULL){
-      process_stack[process_stack_num] = current->right;
-      process_stack_num++;
-    }
     if (current->left != NULL){
       process_stack[process_stack_num] = current->left;
+      process_stack_num++;
+    }
+    if (current->right != NULL){
+      process_stack[process_stack_num] = current->right;
       process_stack_num++;
     }
   }
@@ -56,23 +56,27 @@ void print_breadth_first(TreeNode* root){
   process_queue_num++;
 
   while( process_queue_num > 0){
-     TreeNode* current = process_queue[0];
-     int i;
-     for (i = 0; i < process_queue_num - 1; i++){
-       process_queue[i] = process_queue[i+1];
-     }
-     process_queue_num--;
+    TreeNode* current = process_queue[0];
+    
+    int i;
+    for (i = 0; i < process_queue_num - 1; i++){
+      process_queue[i] = process_queue[i+1];
+    }
+    
+process_queue_num--;
+    printf("%d ", current->val);
 
-     printf("%d ", current->val);
-     if (current->left != NULL){
+    if (current->left != NULL){
       process_queue[process_queue_num] = current->left;
       process_queue_num++;
     }
     if (current->right != NULL){
       process_queue[process_queue_num] = current->right;
       process_queue_num++;
-    }
+    }    
   }
+
+  
 }
 
 //     0
