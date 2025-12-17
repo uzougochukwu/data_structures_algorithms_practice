@@ -32,5 +32,20 @@
 	; then move them into the byte at mem index
 	; continue until result of x/10 is 0
 
+	%include "../include/printf.asm"
+
 section .text
 	
+global _start
+
+_start:
+
+entry:
+	mov rdi, 10000000
+
+	push rdi
+	
+	call printf
+
+	mov rax, 0x3c
+	syscall

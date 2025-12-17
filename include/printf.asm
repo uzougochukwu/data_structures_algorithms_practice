@@ -6,16 +6,20 @@ section .data
 
 negative_sign: db "-"
 
-global _start
-
 section .text
 
-_start:
-
+printf:
+	; rsp + 8 -> rdi value
+	; rsp -> return address
+	
+	mov rbp, rsp
+	add rsp, 8
+	
+	pop rax 	; dividend goes in rax, this is what we will print
 	xor rdx, rdx		; zero out rdx as the remainder is stored here (which we will print)
 	xor r12, r12		; keep track of no. of digits to print
 
-	mov rax, -9223372036854775808	; dividend goes in rax, this is what we will print
+	
 	mov rdi, 0xA
 
 	test rax, rax		; determine if rax is negative
@@ -67,10 +71,11 @@ print:
 	syscall
 
 exit:
+	mov rsp, rbp
 	
-	mov rdi, 0x1
-	mov rax, 0x3c
-	syscall
+ret
 
 
-	
+check:
+	mov r11, 0x2
+	ret
