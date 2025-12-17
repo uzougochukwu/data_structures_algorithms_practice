@@ -10,8 +10,8 @@
 	; but we need to scale up the remainder of x/10 by its position
 	; first we move it into nibble 0, then 1, 2 etc.
 	; if the number of loop iterations is i
-	; then after each x/10, we multiply that result by 2 to the power of (4 multiplied by i)
-	; so that on the 0th iteration its x/10 multiplied by 2 to the power of 0
+	; then after each x/10, we multiply that remainder by 2 to the power of (4 multiplied by i)
+	; so that on the 0th iteration its x/10 remainder multiplied by 2 to the power of 0
 	; then 2 to the power of 4
 	; then 2 to the power of 8
 	; and so on until the result of x/10 is 0
@@ -32,20 +32,69 @@
 	; then move them into the byte at mem index
 	; continue until result of x/10 is 0
 
-	%include "../include/printf.asm"
+	; max number to display is 9223372036854775807
 
+%include "../include/printf.asm"
+
+	; printf can only be used once due to incorrectly saving and restoring registers
+	; number to print in rax
+	
+
+
+section .data
+	p4_series dq 1, 16, 256, 65536 ; scaling factor is 8 because it is 8 bytes in a quadword
 section .text
 	
-global _start
+global _start	
 
 _start:
 
 entry:
-	mov rdi, 10000000
+	; decimal number stored in r11
+	; binary coded decimal number stored in rsi
 
-	push rdi
+	xor rsi, rsi
+
+	mov rax, 25
+
+	mov r11, 25
+
+	mov rdi, 0xa
 	
+	div rdi 		; rax / rdi = result in rax and rem in rdx
+
+	; remainder stored in rdx
+
+	add rsi, rdx		; rsi will contain final bcd number
+
+	; first number is in rsi
+
+	; must clear rdx otherwise div instruction becomes different
+
+	; rsi contains 5 - as it should
+
+	xor rdx, rdx
+
+	div rdi			; rax / rdi = result in rax and rem in rdx
+
+	mov rax, rdx		; need to multiply rem by power of 4 factor (rem is 2 now)
+
+	
+
+	; 2 is in rax as it should be
+	
+	mul qword [p4_series+ 1*8]
+
+	; 2 * 16 should be 32
+	; 32 is in rax
+
+	add rsi, rax
+
+	; rsi should now have 37
+
+	mov rax, rsi  		; it does!
 	call printf
 
+end:	
 	mov rax, 0x3c
 	syscall

@@ -1,21 +1,23 @@
 	; division of any number from 9223372036854775807 to -9223372036854775808
 	; it prints any signed 64 bit number, with the most significant bit being the sign bit
 
+	; the number to be printed must be in r15 when this function is called
+
 
 section .data
 
 negative_sign: db "-"
 
+new_line: db `\n`,0
+
 section .text
 
 printf:
-	; rsp + 8 -> rdi value
-	; rsp -> return address
+
 	
 	mov rbp, rsp
-	add rsp, 8
-	
-	pop rax 	; dividend goes in rax, this is what we will print
+
+	; dividend is in rax, this is what we will print
 	xor rdx, rdx		; zero out rdx as the remainder is stored here (which we will print)
 	xor r12, r12		; keep track of no. of digits to print
 
@@ -64,6 +66,16 @@ put_digits_on_stack:
 	jmp put_digits_on_stack
 
 print:
+
+	; print new line
+
+	mov rdi, 0x1
+	mov rax, 0x1
+	mov rsi, new_line
+	mov rdx, 0x1		; print 2 bytes
+	syscall	
+
+	
 	mov rdi, 0x1
 	mov rax, 0x1
 	mov rsi, rsp		; start at current mem address in rsp
@@ -71,6 +83,8 @@ print:
 	syscall
 
 exit:
+
+	
 	mov rsp, rbp
 	
 ret
