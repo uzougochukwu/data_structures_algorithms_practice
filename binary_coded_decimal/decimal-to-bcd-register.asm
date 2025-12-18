@@ -35,7 +35,9 @@
 	; max number to display is 9223372036854775807
 
 
-%include "../include/printf.asm"
+%include "../include/print_registers.asm"
+
+	
 
 	; for printf number must be in rax
 
@@ -93,7 +95,7 @@ decimal_to_bcd:
 	mov rax, r11		; move result of previous div into rax
 
 	div rdi
-
+	call print_registers
 	test rax, rax		; rax is the result of the div instruction, if it is zero that means we are on the last digit, but we still need to go through the rest of the loop (for the last time)
 	cmovz r15, r13		; if the result of test rax, rax sets the zero flag, we want to move 1 into r15, to show we are on the last digit
 
@@ -115,12 +117,12 @@ decimal_to_bcd:
 	jz decimal_to_bcd
 
 
-
+	call print_registers
 
 
 print_result:
-	mov rax, rsi
-	call printf
+;	mov rax, rsi
+;	call printf
 
 end:	
 	mov rax, 0x3c
