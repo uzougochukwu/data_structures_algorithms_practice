@@ -1,5 +1,5 @@
-	; division of any number from 9223372036854775807 to -9223372036854775808
-	; it prints any signed 64 bit number, with the most significant bit being the sign bit
+	; prints from 2,147,483,647 to -2,147,483,648
+	; it prints any signed 32 bit number, with the most significant bit being the sign bit
 
 	; the number to be printed must be in r15 when this function is called
 
@@ -10,17 +10,23 @@ negative_sign: db "-"
 
 new_line: db `\n`,0
 
+space: db ' ',0
+
 section .text
+
+	; remove push and pops on lines 35 to 47
+	; use a condition register to determine if the number is negative, then push "-" onto stack at last minute
+	; stop messing around with the stack so much!
+	; see if you can get printf to print all registers rather than just rax, but don't worry if not able
+	; focus on multithreading with the binary coded decimal numbers
 
 printf:
 
-	
-	mov rbp, rsp
+	mov qword rax, [rsp + 8] ; move the value that was pushed onto the stack into the rax reg for printing
 
 	; dividend is in rax, this is what we will print
-	xor rdx, rdx		; zero out rdx as the remainder is stored here (which we will print)
-	xor r12, r12		; keep track of no. of digits to print
 
+	xor r12, r12		; keep track of no. of digits to print
 	
 	mov rdi, 0xA
 
@@ -30,9 +36,7 @@ printf:
 
 	neg rax
 
-	push rdi		; save rdi as it must be 10 for the division
 	push rax		; save rax as it contains the number
-	push rdx
 
 	mov rdi, 0x1
 	mov rax, 0x1
@@ -40,10 +44,10 @@ printf:
 	mov rdx, 0x1		; print 1 byte
 	syscall
 
-	pop rdx
 	pop rax
-	pop rdi			; restore rdi
-
+	
+	xor rdx, rdx		; zero out rdx as the remainder is stored here (which we will print)
+	mov rdi, 0xA		; 10
 
 
 put_digits_on_stack:
@@ -67,14 +71,6 @@ put_digits_on_stack:
 
 print:
 
-	; print new line
-
-	mov rdi, 0x1
-	mov rax, 0x1
-	mov rsi, new_line
-	mov rdx, 0x1		; print 2 bytes
-	syscall	
-
 	
 	mov rdi, 0x1
 	mov rax, 0x1
@@ -82,13 +78,18 @@ print:
 	mov rdx, r12		; print from rsp to rsp + r12
 	syscall
 
+	; print space
+
+	mov rdi, 0x1
+	mov rax, 0x1
+	mov rsi, space
+	mov rdx, 0x1		; print 2 bytes
+	syscall		
+
+	add rsp, r12
+
 exit:
-
-	
-	mov rsp, rbp
-	
-ret
-
+	ret
 
 check:
 	mov r11, 0x2
