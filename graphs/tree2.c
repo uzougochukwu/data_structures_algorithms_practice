@@ -26,7 +26,7 @@ void print_depth_first(TreeNode* root){
   process_stack_num++;
 
   while (process_stack_num > 0 ){
-    TreeNode* current = process_stack[process_stack_num - 1];
+    TreeNode* current = process_stack[0];
     process_stack_num--;
 
     printf("%d ", current->val);
@@ -53,6 +53,7 @@ void print_depth_first_recursive(TreeNode* root){
     print_depth_first_recursive(current->right);
   }
 }
+
 
 
 

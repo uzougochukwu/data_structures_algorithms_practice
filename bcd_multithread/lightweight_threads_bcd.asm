@@ -50,6 +50,7 @@ section .data
 section .bss
 
 	digit_print resb 1
+	addr resq 1
 
 section .text
 
@@ -66,6 +67,8 @@ _start:
 
 
 .num25: dq 37
+
+
 
 
 print_zeroth_nibble:
@@ -96,6 +99,7 @@ thread_create:
 	mov rax, SYS_clone
 	syscall
 	ret
+
 
 stack_create:
 	mov rdi, 0		; mmap will return a block of memory at a random address
