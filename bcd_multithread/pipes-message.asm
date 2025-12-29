@@ -6,7 +6,9 @@
 %define SYS_pipe        22
 %define SYS_read        0
 %define SYS_close       3
-	
+
+	; sys/pipes.h
+%define O_CLOEXEC       02000000
 
 ;; unistd.h
 %define STDIN		0
@@ -35,8 +37,8 @@
 
 section .bss
 
-	pipe_fd resb 2		; this is where the two file descriptors for the pipe will end up
-	output resb 2
+	pipe_fd resb 8		; this is where the two file descriptors for the pipe will end up
+	output resb 8
 
 section .text
 
@@ -48,13 +50,10 @@ global _start
 _start:
 
 	mov rdi, pipe_fd
+	mov rsi, O_CLOEXEC
 	mov rax, SYS_pipe
 	syscall
 
-	xor rdi, rdi
-
-	mov dil, byte [pipe_fd]
-	mov dil, byte [pipe_fd+1]
 
 	xor rdi, rdi
 
@@ -73,13 +72,13 @@ parent:
 	xor rdi, rdi
 
 	; close write end of pipe
-	mov dil, byte [pipe_fd+1]
+	mov edi, dword [pipe_fd+4]
 	mov rax, SYS_close
 	syscall
 
 	xor rdi, rdi
 ; read from pipe
-	mov dil, byte [pipe_fd]
+	mov edi, dword [pipe_fd]
 	mov rsi, output
 	mov rdx, len
 	mov rax, SYS_read
@@ -87,7 +86,7 @@ parent:
 
 	xor rdi, rdi
 ; close read
-	mov dil, byte [pipe_fd]
+	mov edi, dword [pipe_fd]
 	mov rax, SYS_close
 	syscall
 
@@ -96,13 +95,13 @@ child:
 
 	xor rdi, rdi
 ; close read pipe
-	mov dil, byte [pipe_fd]
+	mov edi, dword [pipe_fd]
 	mov rax, SYS_close
 	syscall
 
 	xor rdi, rdi
 ; write into pipe
-	mov dil, byte [pipe_fd+1]
+	mov edi, dword [pipe_fd+4]
 	mov rsi, msg
 	mov rdx, len
 	mov rax, SYS_write
@@ -111,7 +110,7 @@ child:
 	xor rdi, rdi
 
 	; close write end of pipe
-	mov dil, byte [pipe_fd+1]
+	mov edi, dword [pipe_fd+4]
 	mov rax, SYS_close
 	syscall
 
