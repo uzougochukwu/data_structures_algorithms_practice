@@ -4,6 +4,9 @@
 %define SYS_clone	56
 %define SYS_exit	60
 %define SYS_pipe        22
+%define SYS_read        0
+%define SYS_close       3
+	
 
 ;; unistd.h
 %define STDIN		0
@@ -31,10 +34,15 @@
  CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_PARENT|CLONE_THREAD|CLONE_IO
 
 section .bss
-	pipe_fd resb 2		; this is where the two file descriptors for the pipe will end up
 
+	pipe_fd resb 2		; this is where the two file descriptors for the pipe will end up
+	output resb 2
 
 section .text
+
+	msg db "hello",0xa
+	len equ $-msg
+	
 global _start
 
 _start:
@@ -43,7 +51,33 @@ _start:
 	mov rax, SYS_pipe
 	syscall
 
-	mov rdi,THREAD_FLAGS
+	xor rdi, rdi
+
+	; pipe_fd[1] is write end
+	; pipe_fd[0] is read end
+
+	mov dil, byte [pipe_fd+1]
+	mov rsi, msg
+	mov rdx, len
+	mov rax, SYS_write
+	syscall
+
+	xor rdi, rdi
+
+	; close write end of pipe
+	mov dil, byte [pipe_fd+1]
+	mov rax, SYS_close
+	syscall
+
+	xor rdi, rdi
+
+	xor rdi, rdi
+; close read
+	mov dil, byte [pipe_fd]
+	mov rax, SYS_close
+	syscall
+
+	mov rdi, THREAD_FLAGS
 	mov rsi, rsp
 	mov rax, SYS_clone
 	syscall
@@ -55,8 +89,22 @@ parent:
 	jmp end
 child:
 
+	xor rdi, rdi
+; close read pipe
+	mov dil, byte [pipe_fd]
+	mov rax, SYS_close
+	syscall
 
 	
+	xor rdi, rdi
+
+	mov dil, byte [pipe_fd]
+	mov rsi, output
+	mov rdx, len
+	mov rax, SYS_read
+	syscall
+
+
 end:	
 	mov rax, 0x3c
 	syscall
