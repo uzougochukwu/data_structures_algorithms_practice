@@ -72,9 +72,9 @@ parent:
 	xor rdi, rdi
 
 	; close write end of pipe
-	mov edi, dword [pipe_fd+4]
-	mov rax, SYS_close
-	syscall
+;	mov edi, dword [pipe_fd+4]
+;	mov rax, SYS_close
+;	syscall
 
 	xor rdi, rdi
 ; read from pipe
@@ -86,18 +86,18 @@ parent:
 
 	xor rdi, rdi
 ; close read
-	mov edi, dword [pipe_fd]
-	mov rax, SYS_close
-	syscall
+;	mov edi, dword [pipe_fd]
+;	mov rax, SYS_close
+;	syscall
 
 	jmp end
 child:
 
 	xor rdi, rdi
 ; close read pipe
-	mov edi, dword [pipe_fd]
-	mov rax, SYS_close
-	syscall
+;	mov edi, dword [pipe_fd]
+;	mov rax, SYS_close
+;	syscall
 
 	xor rdi, rdi
 ; write into pipe
@@ -110,9 +110,9 @@ child:
 	xor rdi, rdi
 
 	; close write end of pipe
-	mov edi, dword [pipe_fd+4]
-	mov rax, SYS_close
-	syscall
+;	mov edi, dword [pipe_fd+4]
+;	mov rax, SYS_close
+;	syscall
 
 
 end:	
