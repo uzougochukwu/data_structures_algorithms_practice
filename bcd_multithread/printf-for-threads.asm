@@ -8,6 +8,7 @@
 	; try approach seen here https://www.nasm.us/doc/nasm09.html#section-9.10.2
 	; then try the clone argument where a struct contains a pointer to tls
 	; fs syntax from https://maskray.me/blog/2021-02-14-all-about-thread-local-storage
+	; other syntax from https://stackoverflow.com/questions/13350936/thread-local-storage-in-assembly
 
 ;; sys/syscall.h
 %define SYS_write	1
@@ -57,10 +58,11 @@ section .bss
 
 section .tbss
 	num resb 1
+;	val resb 1
 
 section .data
 	tid equ 5
-	
+	val equ 0
 
 section .text
 global _start
@@ -70,14 +72,15 @@ _start:
 
 	mov rdi, ARCH_SET_FS
 ;	mov rsi, 0x20000
-	mov rsi, 0x7fffffffdcbc
+;	mov rsi, 0x7fffffff0000
+	mov rsi, 0x400000
 	mov rax, SYS_arch_prctl
 	syscall
 
 	; clone: rdi=flags, rsi=top of child stack
 	
 	mov rdi, THREAD_FLAGS
-	mov rsi, rsp
+	mov rsi, 0x7fffff550000
 ;	mov r9, 0x20000
 ;	mov r8, 0x7fffffffdcbc
 	mov rax, SYS_clone
@@ -87,7 +90,9 @@ parent:
 	test rax, rax
 	jz child
 
-	mov byte fs:0, 5
+	mov al, byte [fs:val]
+;	mov byte [fs:0], 5
+;	mov byte [gs:0], 5
 ;	mov byte fs:0x20000, 5
 ;	mov dword fs:0x7fffffffdcbc, 5
 
@@ -97,8 +102,10 @@ parent:
 	jmp end
 	
 child:
-	
-	mov byte [fs:0], 6
+
+	mov al, byte [fs:val]
+;	mov byte [fs:0], 6
+;	mov byte [gs:0], 6
 ;	mov byte fs:0x20000, 6
 ;	mov dword fs:0x7fffffffdcbc, 6	
 	
