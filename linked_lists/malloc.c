@@ -32,16 +32,38 @@ typedef struct block mem_block;
 int main() {
 
 // declare initial head block - we pretend that it has been used, as it makes the code easier
+// need to declare head pointer at sbrk(0)
+// then do sbrk(sizeof(mem_block))
+// that provides enough memory for the head mem_block header
 mem_block *head = sbrk(sizeof(mem_block));
 head->used = 1;
-head->block_size = 0;
+head->block_size = sizeof(mem_block);
 head->previous = NULL;
 head->next = NULL;
-head->start_mem_of_block = sbrk(32);
+head->start_mem_of_block = sbrk(head->block_size);
 
+// when allocating a new mem_block (which should be done infrequently)
+// loop through linked_list to check if a block is available 
+// loop to end of linked list and do mem_block *old = head
+// if no block is found that is larger than desired_memory 
+// do mem_block *tmp = sbrk(1);
+// that increases the heap break by one byte, which is where the next blocks header will start
+// then go to the previous block and make sure that head->next = tmp
+// then in the new block make sure that head->previous equals the old block
+// then do sbrk(sizeof(mem_block))
+// that provides enough memory for the header of this new block
+// do set all the values
+// then sbrk( ceiling((desired_memory/page_size) + 1) * page_size )
+
+// if a larger block is found, lets call it current
+// create a new block pointing to current->start_mem_of_block + (current->block_size - desired_memory)
+// then sbrk(sizeof(mem_block), for header
+// make sure current->next points to the block we just added in
+// make sure current->block_size is decreased by (desired_memory + sizeof(mem_block)) 
+ 
 // check that the memory locations were not corrupted
- printf("%d used\n", head->used);
- printf("%d size\n", head->block_size);
+printf("%d used\n", head->used);
+printf("%d size\n", head->block_size);
  
 // printf(" program break at start is %d\n", head);
 
