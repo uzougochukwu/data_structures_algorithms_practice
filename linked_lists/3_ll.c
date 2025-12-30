@@ -174,15 +174,11 @@ node_t* delete_node_at_beginning(node_t **current_node) // by passing in a point
   
 }
 
-
-
 int main() {
 
 node_t *head = malloc(sizeof(node_t));
 
 head->value = 1;
-
-
 
   for (int i = 2; i < 7; i++){
     add_node_at_end(head, i);
