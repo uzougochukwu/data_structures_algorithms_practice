@@ -70,8 +70,6 @@ int delete_node_at_particular_point(node_t *current_node, int index)
 
 }
 
-
-
 void print_list(node_t *current_node)
 {
   while (current_node != NULL)
@@ -125,7 +123,6 @@ node_t* add_node_at_beginning(node_t **head, int new_value) { // by passing in a
  *head = tmp; // change the head pointer to be the address of the tmp node, so tmp is our new head node
 
  return tmp;
-
 
 }
 
