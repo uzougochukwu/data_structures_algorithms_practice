@@ -12,7 +12,6 @@
 // free takes a memory address and goes through the linked list until it finds the bloc that has that mem address at the start
 // calls sbrk to reduce amount of heap memory
 
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -25,8 +24,9 @@ struct block {
   struct block* previous; // pointer to previous memory block
   struct block* next; // pointer to next memory block
 };
-
 typedef struct block mem_block;
+
+
   
 
 int main() {
@@ -35,12 +35,13 @@ int main() {
 // need to declare head pointer at sbrk(0)
 // then do sbrk(sizeof(mem_block))
 // that provides enough memory for the head mem_block header
-mem_block *head = sbrk(sizeof(mem_block));
+mem_block *head = sbrk(0);
+sbrk(sizeof(mem_block)); 
 head->used = 1;
 head->block_size = sizeof(mem_block);
 head->previous = NULL;
 head->next = NULL;
-head->start_mem_of_block = sbrk(head->block_size);
+head->start_mem_of_block = sbrk(1);
 
 // when allocating a new mem_block (which should be done infrequently)
 // loop through linked_list to check if a block is available 
@@ -54,6 +55,7 @@ head->start_mem_of_block = sbrk(head->block_size);
 // that provides enough memory for the header of this new block
 // do set all the values
 // then sbrk( ceiling((desired_memory/page_size) + 1) * page_size )
+ 
 
 // if a larger block is found, lets call it current
 // create a new block pointing to current->start_mem_of_block + (current->block_size - desired_memory)
