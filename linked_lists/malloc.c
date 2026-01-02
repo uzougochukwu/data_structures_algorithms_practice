@@ -41,6 +41,7 @@ head->block_size = 0;
 head->previous = NULL;
 head->next = NULL;
 head->start_mem_of_block = sbrk(1);
+// declare a tail node
 return head;
 
 }
@@ -83,7 +84,7 @@ printf("%d of memory to add\n", mem_addition);
 
 // we have our tmp pointer at the start of the new memory block but now we need to actually allocate memory for the header of the tmp node
 sbrk(sizeof(mem_block));
-tmp->used = 1; 
+tmp->used = 0; 
 tmp->next = NULL;
 // block size will be set after the sbrk syscall has been used
 tmp->start_mem_of_block = sbrk(1);
@@ -93,7 +94,84 @@ tmp->block_size = mem_addition;
  
 return 0; 
 }
-			     
+
+int split_block(int desired_memory, mem_block* current_node){
+  // return one means a block has been split
+  // return 0 means a block has not been split
+  
+
+  while( (current_node->next != NULL) ){
+    if ( (current_node->used == 0) && (current_node->block_size > desired_memory) ){
+      // split the block
+      mem_block* tmp = sbrk(0);
+       // check if next of current_node exists
+      if (current_node->next != NULL){
+	tmp->next = current_node->next;
+      } else {
+	tmp->next = NULL;
+      }
+
+      current_node->next = tmp;
+      tmp->previous = current_node;
+      // move tmp to correct position
+      tmp->start_mem_of_block = (int *)((char *)tmp - desired_memory);
+      tmp = (int *)((char *)tmp - sizeof(mem_block) - desired_memory);
+      
+      current_node->block_size = current_node->block_size - sizeof(mem_block);
+      current_node->block_size = current_node->block_size - desired_memory;
+
+      tmp->block_size = desired_memory;
+      tmp->used = 1;
+      
+      return 1;
+    }
+    current_node=current_node->next;
+
+}
+  return 0;
+
+}
+
+mem_block* fetch(int desired_memory, mem_block* current_node){
+
+  while(current_node->next != NULL){
+    if (current_node->block_size == desired memory){
+      return current_node->start_mem_of_block;
+    }
+    current_node=current_node->next;
+  }
+  return 0;
+}
+
+mem_block* malloc(int desired_memory){
+
+//int outcome = check_for_memory
+
+outcome = check_for_memory(desired_memory, head);
+
+if (outcome == 0)
+   allocate_more_memory(desired_memory, head);
+  
+split_block(desired_memory, head);
+
+ int *ptr = fetch(desired_memory, head);
+
+ return ptr;
+}
+
+int free(int *mem_address, mem_block* current_node){
+
+  while(current_node->next != NULL){
+    if (current_node->start_mem_of_block == mem_address){
+      current_node->used = 0;
+    }
+    current_node=current_node->next;
+  }
+
+  return 0;
+
+}
+
 int main() {
 // when allocating a new mem_block (which should be done infrequently)
 // loop through linked_list to check if a block is available 
@@ -119,6 +197,8 @@ int main() {
 // stage2: if it isn't, allocate more mem with sbrk, if it is go to stage 3
 // stage3: split the block into two by freeing the memory portion that isn't need, the first block is used, the second block is free (when blocks are split, remember to account for the amount of memory used by the header)
 
+// free goes to the block with the same mem_start as the memory address passed into the function  
+
 mem_block* head = initialise();
   
 // check that the memory locations were not corrupted
@@ -129,7 +209,7 @@ printf("%d next\n", head->next);
 printf("%d start mem\n", head->start_mem_of_block);
 printf("%d actual size\n", sizeof(mem_block));
 
-int outcome = check_for_memory(50, head);
+//int outcome = check_for_memory(50, head);
 
 printf("outcome is %d as we do not have enough memory\n", outcome); 
 
