@@ -73,14 +73,15 @@ _start:
 	mov rdi, ARCH_SET_FS
 ;	mov rsi, 0x20000
 ;	mov rsi, 0x7fffffff0000
-	mov rsi, 0x400000
+	mov rsi, 0x401000
 	mov rax, SYS_arch_prctl
 	syscall
 
 	; clone: rdi=flags, rsi=top of child stack
 	
 	mov rdi, THREAD_FLAGS
-	mov rsi, 0x7fffff550000
+;	mov rsi, 0x7fffff550000
+	mov rsi, 0x401000	
 ;	mov r9, 0x20000
 ;	mov r8, 0x7fffffffdcbc
 	mov rax, SYS_clone
@@ -89,6 +90,18 @@ _start:
 parent:
 	test rax, rax
 	jz child
+
+	xor rax, rax
+
+	mov al, 5
+
+	mov rsi, 0x401000
+
+	mov byte [rsi], 5
+
+	xor rax, rax
+
+;	wrfsbase rax
 
 	mov al, byte [fs:val]
 ;	mov byte [fs:0], 5
@@ -102,6 +115,7 @@ parent:
 	jmp end
 	
 child:
+	xor rax, rax
 
 	mov al, byte [fs:val]
 ;	mov byte [fs:0], 6
