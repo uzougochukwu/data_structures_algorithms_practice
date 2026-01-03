@@ -91,7 +91,7 @@ parent:
 	test rax, rax
 	jz child
 
-	mov byte [fs:val], 5
+	mov byte [fs:val], 65
 
 	xor rax, rax
 
@@ -106,6 +106,15 @@ parent:
 
 ;	mov rax, [rel tid wrt ..gottpoff]
 ;	mov rax, [wrt ..gottpoff]
+
+	; print tls value
+
+	mov rax, 1
+	mov rdi, 1
+	mov rsi, 0x401000
+	mov rdx, 1
+	syscall
+	
 	
 	jmp end
 	
