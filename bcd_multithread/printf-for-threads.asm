@@ -81,7 +81,7 @@ _start:
 	
 	mov rdi, THREAD_FLAGS
 ;	mov rsi, 0x7fffff550000
-	mov rsi, 0x401000	
+	mov rsi, 0x402000	
 ;	mov r9, 0x20000
 ;	mov r8, 0x7fffffffdcbc
 	mov rax, SYS_clone
@@ -111,7 +111,9 @@ parent:
 
 	mov rax, 1
 	mov rdi, 1
-	mov rsi, 0x401000
+;	mov rsi, 0x401000
+;	lea rsi, [fs:val]
+	rdfsbase rsi
 	mov rdx, 1
 	syscall
 	
@@ -119,7 +121,7 @@ parent:
 	jmp end
 	
 child:
-	mov byte [fs:val], 6
+	mov byte [fs:val], 66
 	
 	xor rax, rax
 
@@ -127,7 +129,15 @@ child:
 ;	mov byte [fs:0], 6
 ;	mov byte [gs:0], 6
 ;	mov byte fs:0x20000, 6
-;	mov dword fs:0x7fffffffdcbc, 6	
+;	mov dword fs:0x7fffffffdcbc, 6
+
+	mov rax, 1
+	mov rdi, 1
+;	mov rsi, 0x401000
+;	lea rsi, [fs:val]
+	rdfsbase rsi
+	mov rdx, 1
+	syscall	
 	
 	jmp end
 
