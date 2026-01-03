@@ -9,6 +9,7 @@
 	; then try the clone argument where a struct contains a pointer to tls
 	; fs syntax from https://maskray.me/blog/2021-02-14-all-about-thread-local-storage
 	; other syntax from https://stackoverflow.com/questions/13350936/thread-local-storage-in-assembly
+	; print the thread id before each register
 
 ;; sys/syscall.h
 %define SYS_write	1

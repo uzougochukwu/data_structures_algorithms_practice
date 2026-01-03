@@ -62,7 +62,7 @@ void printGraph(struct Graph* graph){
 }
 
 int main(){
-
+  (
 struct Graph* graph = createAGraph(4);
 addEdge(graph, 0, 1);
 addEdge(graph, 0, 2);
