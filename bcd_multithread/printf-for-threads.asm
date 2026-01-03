@@ -91,19 +91,14 @@ parent:
 	test rax, rax
 	jz child
 
-	xor rax, rax
-
-	mov al, 5
-
-	mov rsi, 0x401000
-
-	mov byte [rsi], 5
+	mov byte [fs:val], 5
 
 	xor rax, rax
 
 ;	wrfsbase rax
 
 	mov al, byte [fs:val]
+	
 ;	mov byte [fs:0], 5
 ;	mov byte [gs:0], 5
 ;	mov byte fs:0x20000, 5
@@ -115,6 +110,8 @@ parent:
 	jmp end
 	
 child:
+	mov byte [fs:val], 6
+	
 	xor rax, rax
 
 	mov al, byte [fs:val]
