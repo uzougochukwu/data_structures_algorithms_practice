@@ -16,16 +16,18 @@ struct Graph {
 // create a node
 struct node* createNode(int v){
 struct node* newNode = malloc(sizeof(struct node));
- newNode -> vertex = v;
- newNode ->next = NULL;
+ newNode->vertex = v;
+ newNode->next = NULL;
+ 
  return newNode;
 }
 
 // create a graph
 struct Graph* createAGraph(int vertices) {
   struct Graph* graph = malloc(sizeof(struct Graph));
+  
   graph->numVertices = vertices;
-
+    
   graph->adjLists = malloc(vertices * sizeof(struct node*));
 
   int i;
@@ -62,7 +64,7 @@ void printGraph(struct Graph* graph){
 }
 
 int main(){
-  (
+  
 struct Graph* graph = createAGraph(4);
 addEdge(graph, 0, 1);
 addEdge(graph, 0, 2);

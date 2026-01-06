@@ -202,6 +202,7 @@ int main() {
 mem_block* head = initialise();
   
 // check that the memory locations were not corrupted
+ 
 printf("%d used\n", head->used);
 printf("%d block-size\n", head->block_size);
 printf("%d prev\n", head->previous);
