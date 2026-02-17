@@ -37,6 +37,10 @@ struct block {
 
 typedef struct block mem_block;
 
+mem_block* initialise();
+int check_for_memory(int desired_memory, mem_block* current_node);
+int* m_malloc(int desired_memory, mem_block* head);
+
 mem_block* initialise(){
 // declare initial head block - we pretend that it has been used, as it makes the code easier
 // need to declare head pointer at sbrk(0)
@@ -69,6 +73,8 @@ return 0;
 }
 
 int allocate_more_memory(int desired_memory, mem_block* current_node){
+  mem_block* head;
+  
 while (current_node->next != NULL){
     current_node = current_node->next;
   }
@@ -94,10 +100,12 @@ printf("%d of memory to add\n", mem_addition);
 sbrk(sizeof(mem_block));
 tmp->used = 0; 
 tmp->next = NULL;
+
+// create the block of memory
+ tmp->start_mem_of_block = m_malloc(mem_addition, head);
+ 
+// sbrk(mem_addition);
 // block size will be set after the sbrk syscall has been used
-tmp->start_mem_of_block = sbrk(1);
-// create the block of memory 
-sbrk(mem_addition);
 tmp->block_size = mem_addition;
  
 return 0; 
@@ -154,29 +162,30 @@ int split_block(int desired_memory, mem_block* current_node){
 
 }
 
-mem_block* fetch(int desired_memory, mem_block* current_node){
+int* fetch(int desired_memory, mem_block* current_node){
 
   while(current_node->next != NULL){
     if (current_node->block_size == desired_memory){
-      return current_node;
+      return current_node->start_mem_of_block;
     }
     current_node=current_node->next;
   }
   return NULL;
 }
 
-mem_block* m_malloc(int desired_memory, mem_block* head){
+int* m_malloc(int desired_memory, mem_block* head){
 
 //int outcome = check_for_memory
 
 int outcome = check_for_memory(desired_memory, head);
 
-if (outcome == 0)
-   allocate_more_memory(desired_memory, head);
+//if (outcome == 0)
+//   allocate_more_memory(desired_memory, head);
+// if outcome 0, simply fetch memory 
   
 split_block(desired_memory, head);
 
-mem_block* ptr = fetch(desired_memory, head);
+int* ptr = fetch(desired_memory, head);
 
  return ptr;
 }
