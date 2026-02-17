@@ -155,30 +155,30 @@ mem_block* fetch(int desired_memory, mem_block* current_node){
 
   while(current_node->next != NULL){
     if (current_node->block_size == desired_memory){
-      return current_node->start_mem_of_block;
+      return current_node;
     }
     current_node=current_node->next;
   }
-  return 0;
+  return NULL;
 }
 
-mem_block* malloc(int desired_memory, mem_block* head){
+mem_block* m_malloc(int desired_memory, mem_block* head){
 
 //int outcome = check_for_memory
 
-outcome = check_for_memory(desired_memory, head);
+int outcome = check_for_memory(desired_memory, head);
 
 if (outcome == 0)
    allocate_more_memory(desired_memory, head);
   
 split_block(desired_memory, head);
 
- int *ptr = fetch(desired_memory, head);
+mem_block* ptr = fetch(desired_memory, head);
 
  return ptr;
 }
 
-int free(int* mem_address, mem_block* current_node){
+int m_free(int* mem_address, mem_block* current_node){
 
   while(current_node->next != NULL){
     if (current_node->start_mem_of_block == mem_address){
