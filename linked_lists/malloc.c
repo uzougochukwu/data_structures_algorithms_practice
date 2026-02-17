@@ -1,3 +1,6 @@
+// compile: gcc malloc.c -o malloc -lm
+
+
 // create a linked list of 'mem_block'
 // call sbrk(0) to see what the current memory break is
 // when malloc called, go to free list for a block that is larger than or equal to requested memory
