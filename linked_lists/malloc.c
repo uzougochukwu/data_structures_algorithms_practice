@@ -11,6 +11,11 @@
 // must implement malloc and free
 // free takes a memory address and goes through the linked list until it finds the bloc that has that mem address at the start
 // calls sbrk to reduce amount of heap memory
+
+// don't try to get exact memory address calculations, just increment pointer in the normal way until you get as close as possible to the desired memory block length
+
+// use other variables to do memory calculation
+// need to use term other than free
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -115,7 +120,21 @@ int split_block(int desired_memory, mem_block* current_node){
       tmp->previous = current_node;
       // move tmp to correct position
       tmp->start_mem_of_block = (int *)((char *)tmp - desired_memory);
-      tmp = (int *)((char *)tmp - sizeof(mem_block) - desired_memory);
+      
+      // tmp = (int *)((char *)tmp - sizeof(mem_block) - desired_memory);
+      // need to convert sizeof(mem_block) and desired memory into struct pointers
+
+      tmp--; // tmp points to a mem_block struct so decrementing it decreases the memory value by the size of the struct
+      // decrement tmp until it is below desired memory
+      // do desired dec_amount = desired_memory / sizeof(mem_block) -- no ceil func as we are ok with leaking that memory
+      // then do a loop where you keep doing tmp-- until tmp is low enough for desired memory to be available
+
+      int dec_amount = desired_memory/sizeof(mem_block);
+
+      for (int i = 0; i <= dec_amount; i++){
+
+	tmp--;
+      }
       
       current_node->block_size = current_node->block_size - sizeof(mem_block);
       current_node->block_size = current_node->block_size - desired_memory;
@@ -135,7 +154,7 @@ int split_block(int desired_memory, mem_block* current_node){
 mem_block* fetch(int desired_memory, mem_block* current_node){
 
   while(current_node->next != NULL){
-    if (current_node->block_size == desired memory){
+    if (current_node->block_size == desired_memory){
       return current_node->start_mem_of_block;
     }
     current_node=current_node->next;
@@ -143,7 +162,7 @@ mem_block* fetch(int desired_memory, mem_block* current_node){
   return 0;
 }
 
-mem_block* malloc(int desired_memory){
+mem_block* malloc(int desired_memory, mem_block* head){
 
 //int outcome = check_for_memory
 
@@ -159,7 +178,7 @@ split_block(desired_memory, head);
  return ptr;
 }
 
-int free(int *mem_address, mem_block* current_node){
+int free(int* mem_address, mem_block* current_node){
 
   while(current_node->next != NULL){
     if (current_node->start_mem_of_block == mem_address){
@@ -202,17 +221,17 @@ int main() {
 mem_block* head = initialise();
   
 // check that the memory locations were not corrupted
- 
+/*
 printf("%d used\n", head->used);
 printf("%d block-size\n", head->block_size);
 printf("%d prev\n", head->previous);
 printf("%d next\n", head->next);
 printf("%d start mem\n", head->start_mem_of_block);
-printf("%d actual size\n", sizeof(mem_block));
+printf("%d actual size\n", sizeof(mem_block));*/
 
 //int outcome = check_for_memory(50, head);
 
-printf("outcome is %d as we do not have enough memory\n", outcome); 
+//printf("outcome is %d as we do not have enough memory\n", outcome); 
 
 int alloc = allocate_more_memory(50, head);
  
