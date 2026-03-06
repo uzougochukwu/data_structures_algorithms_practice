@@ -79,8 +79,8 @@ while (current_node->next != NULL){
     current_node = current_node->next;
   }
   
-// declare new node - one byte above the end of the previous node
-mem_block* tmp = sbrk(1);
+// declare new node - allocating enough extra memory for the block itself, using sizeof
+ mem_block* tmp = sbrk(sizeof(mem_block));
 
 // make current_node next point to that new node
 current_node->next = tmp;
