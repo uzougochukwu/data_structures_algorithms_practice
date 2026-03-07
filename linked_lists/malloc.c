@@ -48,7 +48,7 @@ mem_block* initialise(){
 // that provides enough memory for the head mem_block header
 mem_block* head = sbrk(0);
 sbrk(sizeof(mem_block)); 
-head->used = 1;
+head->used = 0;
 head->block_size = 0;
 head->previous = NULL;
 head->next = NULL;
@@ -62,7 +62,7 @@ int check_for_memory(int desired_memory, mem_block* current_node){
   // return 1 means we have a block of memory larger than the desired memory
   // return 0 means we need to allocate a block that is large enough
   
-  while (current_node-> next != NULL){
+  while (current_node->next != NULL){
     if ( (current_node->block_size > desired_memory) && (current_node->used == 0) ){
       return 1;
     }
@@ -102,9 +102,9 @@ tmp->used = 0;
 tmp->next = NULL;
 
 // create the block of memory
- tmp->start_mem_of_block = m_malloc(mem_addition, head);
+ tmp->start_mem_of_block = sbrk(0);
  
-// sbrk(mem_addition);
+sbrk(mem_addition);
 // block size will be set after the sbrk syscall has been used
 tmp->block_size = mem_addition;
  
@@ -175,19 +175,36 @@ int* fetch(int desired_memory, mem_block* current_node){
 
 int* m_malloc(int desired_memory, mem_block* head){
 
-//int outcome = check_for_memory
+// if (outcome == 0)
+// allocate_more_memory(desired_memory, head);
+ 
+// if outcome 1, we have a large enough block, so use fetch in the hope that block is exact same size
+
+// if fetch returns null, then we use split block, else a pointer is returned
+
+// after split block, run fetch again   
+
+// int outcome = check_for_memory
 
 int outcome = check_for_memory(desired_memory, head);
 
-//if (outcome == 0)
-//   allocate_more_memory(desired_memory, head);
-// if outcome 0, simply fetch memory 
-  
-split_block(desired_memory, head);
+ if (outcome == 0){
+   printf("outcome is 0");
+   allocate_more_memory(desired_memory, head);
+ }
+
+// we now have enough memory 
 
 int* ptr = fetch(desired_memory, head);
 
- return ptr;
+ if (ptr == NULL){
+split_block(desired_memory, head);
+   
+ }
+
+ptr = fetch(desired_memory, head);
+
+return ptr;
 }
 
 int m_free(int* mem_address, mem_block* current_node){
@@ -245,7 +262,11 @@ printf("%d actual size\n", sizeof(mem_block));*/
 
 //printf("outcome is %d as we do not have enough memory\n", outcome); 
 
-int alloc = allocate_more_memory(50, head);
+//int alloc = allocate_more_memory(50, head);
+
+int* mem = m_malloc(50, head);
+
+ mem = m_malloc(100, head); 
  
 return 0;
 }
