@@ -129,8 +129,7 @@ int split_block(int desired_memory, mem_block* current_node){
   // return one means a block has been split
   // return 0 means a block has not been split
   
-
-  while( (current_node->next != NULL) ){
+while(1){
     if ( (current_node->used == 0) && (current_node->block_size > desired_memory) ){
       // split the block
       mem_block* tmp = sbrk(0);
@@ -140,15 +139,12 @@ int split_block(int desired_memory, mem_block* current_node){
       } else {
 	tmp->next = NULL;
       }
-
       current_node->next = tmp;
       tmp->previous = current_node;
       // move tmp to correct position
       tmp->start_mem_of_block = (int *)((char *)tmp - desired_memory);
-      
       // tmp = (int *)((char *)tmp - sizeof(mem_block) - desired_memory);
       // need to convert sizeof(mem_block) and desired memory into struct pointers
-
       tmp--; // tmp points to a mem_block struct so decrementing it decreases the memory value by the size of the struct
       // decrement tmp until it is below desired memory
       // do desired dec_amount = desired_memory / sizeof(mem_block) -- no ceil func as we are ok with leaking that memory
@@ -157,20 +153,22 @@ int split_block(int desired_memory, mem_block* current_node){
       int dec_amount = desired_memory/sizeof(mem_block);
 
       for (int i = 0; i <= dec_amount; i++){
-
 	tmp--;
       }
-      
       current_node->block_size = current_node->block_size - sizeof(mem_block);
       current_node->block_size = current_node->block_size - desired_memory;
-
+      current_node->next = tmp;
       tmp->block_size = desired_memory;
       tmp->used = 1;
       
       return 1;
     }
-    current_node=current_node->next;
-
+    if (current_node->next != NULL){
+     current_node=current_node->next;
+    }
+    else
+      {break;	
+    }
 }
   return 0;
 
