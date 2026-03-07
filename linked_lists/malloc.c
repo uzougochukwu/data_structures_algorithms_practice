@@ -62,11 +62,25 @@ int check_for_memory(int desired_memory, mem_block* current_node){
   // return 1 means we have a block of memory larger than the desired memory
   // return 0 means we need to allocate a block that is large enough
   
-  while (current_node->next != NULL){
+  /* while (current_node->next != NULL){
     if ( (current_node->block_size > desired_memory) && (current_node->used == 0) ){
       return 1;
     }
     current_node = current_node->next;
+  }
+  */
+
+while (1){
+if ( (current_node->block_size > desired_memory) && (current_node->used == 0) ){
+      return 1;
+    }
+ 
+ if(current_node-> next != NULL){
+    current_node = current_node->next;
+ }else {
+   break;
+ }
+
   }
 
 return 0;
@@ -189,7 +203,7 @@ int* m_malloc(int desired_memory, mem_block* head){
 int outcome = check_for_memory(desired_memory, head);
 
  if (outcome == 0){
-   printf("outcome is 0");
+
    allocate_more_memory(desired_memory, head);
  }
 
