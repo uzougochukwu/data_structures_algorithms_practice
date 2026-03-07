@@ -178,12 +178,27 @@ int split_block(int desired_memory, mem_block* current_node){
 
 int* fetch(int desired_memory, mem_block* current_node){
 
-  while(current_node->next != NULL){
+  /*  while(current_node->next != NULL){
     if (current_node->block_size == desired_memory){
       return current_node->start_mem_of_block;
     }
     current_node=current_node->next;
   }
+*/
+
+while (1){
+    if (current_node->block_size == desired_memory){
+      return current_node->start_mem_of_block;
+    }
+
+    if (current_node->next != NULL){
+    current_node=current_node->next;
+    }else{
+      break;
+    }
+
+  }
+  
   return NULL;
 }
 
