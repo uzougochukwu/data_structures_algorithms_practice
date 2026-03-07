@@ -293,7 +293,13 @@ printf("%d actual size\n", sizeof(mem_block));*/
 
 int* mem = m_malloc(50, head);
 
- mem = m_malloc(100, head); 
+ mem = m_malloc(100, head);
+
+ mem = m_malloc(1000, head);
+
+ mem = m_malloc(5000, head);
+ 
+ m_free(mem, head);
  
 return 0;
 }
